@@ -107,27 +107,42 @@ wheels = [
 
 [[package]]
 name = "metamath-logic"
-version = "0.0.1"
-source = { registry = "https://pypi.org/simple" }
+version = "0.0.2"
+source = { directory = "../metamath-logic" }
 dependencies = [
     { name = "metamath-prelude" },
     { name = "proof-scaffold" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/d8/43c45180683229f448ef7230885cd9f40d13703687f9330f1c9e391e40e7/metamath_logic-0.0.1.tar.gz", hash = "sha256:1915a87c29322d64a7611301de524fa347e2d97dd53df4d0a1f7241c7eea08fb", size = 16885, upload-time = "2026-02-11T19:16:18.403Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/54/3f/4ade88501afe2e733b42695dcf83b8fd04137425b45e4cf07c202cc23f2b/metamath_logic-0.0.1-py3-none-any.whl", hash = "sha256:9e762c0644438c6709ff4b51d793a36ffb0ec6764fb638d84317972f585b2794", size = 20485, upload-time = "2026-02-11T19:16:16.701Z" },
+
+[package.metadata]
+requires-dist = [
+    { name = "metamath-prelude", specifier = "==0.0.2" },
+    { name = "proof-scaffold", specifier = "==0.0.5" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.8" },
+    { name = "pytest", specifier = ">=8" },
+    { name = "ruff", specifier = ">=0.6" },
 ]
 
 [[package]]
 name = "metamath-prelude"
-version = "0.0.1"
-source = { registry = "https://pypi.org/simple" }
+version = "0.0.2"
+source = { directory = "../metamath-prelude" }
 dependencies = [
     { name = "proof-scaffold" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/19/ee/2045aa145dc1c2db2ca17c0644f513188732f0329eba7920fd3fbc284b5d/metamath_prelude-0.0.1.tar.gz", hash = "sha256:11186a135ff8f297c7f87aef2c99731cec431565dd61224a87acd0d82e535790", size = 6885, upload-time = "2026-02-11T18:36:29.501Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f8/80/77b04bec400a3707a08e7e5678bce7c5fa0f4137bb9cb05b3107bca377f1/metamath_prelude-0.0.1-py3-none-any.whl", hash = "sha256:0bcce822eafd4f783b5bf0ebba98f7b38bf5407a6c43fa8eaf5c166b0299e613", size = 7390, upload-time = "2026-02-11T18:36:31.103Z" },
+
+[package.metadata]
+requires-dist = [{ name = "proof-scaffold", specifier = "==0.0.5" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.8" },
+    { name = "pytest", specifier = ">=8" },
+    { name = "ruff", specifier = ">=0.6" },
 ]
 
 [[package]]
@@ -231,9 +246,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "metamath-logic", specifier = "==0.0.1" },
-    { name = "metamath-prelude", specifier = "==0.0.1" },
-    { name = "proof-scaffold", specifier = "==0.0.4" },
+    { name = "metamath-logic", directory = "../metamath-logic" },
+    { name = "metamath-prelude", directory = "../metamath-prelude" },
+    { name = "proof-scaffold", specifier = "==0.0.5" },
 ]
 
 [package.metadata.requires-dev]
@@ -245,11 +260,11 @@ dev = [
 
 [[package]]
 name = "proof-scaffold"
-version = "0.0.4"
+version = "0.0.5"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/8d/9f/d86c88c3200bef085d0f97d2d15d561779c463553773b56c44c3409e3fe1/proof_scaffold-0.0.4.tar.gz", hash = "sha256:e1821ef1b63fc432a26f8637b329f97dc847eb31ad4bf5f48c9f2e0824ec2dea", size = 89595, upload-time = "2026-02-11T17:38:53.776Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/d6/cba2aa5298bf331be1c6b8728f71329faee7e6fda5753c7b0a4fa5352283/proof_scaffold-0.0.5.tar.gz", hash = "sha256:79713ad3ccbd96804e7ee9401c0c03b9e00f5a2307952f19f6d771d8710807ba", size = 90079, upload-time = "2026-02-11T19:40:35.166Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6e/3b/e6a87b17c766650f6db612325c606a2eeff54928b21b13bc95c717fd7d79/proof_scaffold-0.0.4-py3-none-any.whl", hash = "sha256:fb19f469f68a7c3ad03eda909f58038d14df393c830d9af7730691c3c0a09238", size = 102642, upload-time = "2026-02-11T17:38:51.888Z" },
+    { url = "https://files.pythonhosted.org/packages/74/aa/7c4caa6cb18c13f21454e88df82243a668141f0fb7d56791653da2177e31/proof_scaffold-0.0.5-py3-none-any.whl", hash = "sha256:f1c487c0ca743b151c664091fa0ee30979adb1d01fd0aac7c1bad43b37509314", size = 103296, upload-time = "2026-02-11T19:40:32.816Z" },
 ]
 
 [[package]]
