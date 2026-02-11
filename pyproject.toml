@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proof-lab"
+version = "0.0.1"
+description = "Experimental proofs built on ProofScaffold"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+license = "GPL-2.0-or-later"
+
+authors = [
+  { name = "Mingli Yuan", email = "mingli.yuan@gmail.com" }
+]
+
+maintainers = [
+  { name = "Mingli Yuan", email = "mingli.yuan@gmail.com" }
+]
+
+keywords = ["metamath", "proof", "proof-scaffold", "logic"]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+dependencies = [
+    "proof-scaffold==0.0.4",
+    "metamath-prelude==0.0.1",
+    "metamath-logic==0.0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/epistemic-frontier/proof-lab"
+Repository = "https://github.com/epistemic-frontier/proof-lab"
+Issues = "https://github.com/epistemic-frontier/proof-lab/issues"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.8",
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.mypy]
+python_version = "3.10"
+mypy_path = "src"
+files = ["src"]
+strict = true
+disallow_untyped_decorators = false
+
+[[tool.mypy.overrides]]
+module = ["skfd.*", "prelude.*", "logic.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
