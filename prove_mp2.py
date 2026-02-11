@@ -1,5 +1,5 @@
 from logic.propositional.hilbert import System
-from logic.propositional.hilbert.lemmas import Proof, ProofBuilder
+from skfd.proof import Proof, ProofBuilder
 
 
 def prove_mp2(sys: System) -> Proof:
