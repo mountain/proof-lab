@@ -108,7 +108,7 @@ wheels = [
 [[package]]
 name = "metamath-logic"
 version = "0.0.2"
-source = { directory = "../metamath-logic" }
+source = { editable = "../metamath-logic" }
 dependencies = [
     { name = "metamath-prelude" },
     { name = "proof-scaffold" },
@@ -130,7 +130,7 @@ dev = [
 [[package]]
 name = "metamath-prelude"
 version = "0.0.2"
-source = { directory = "../metamath-prelude" }
+source = { editable = "../metamath-prelude" }
 dependencies = [
     { name = "proof-scaffold" },
 ]
@@ -246,9 +246,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "metamath-logic", directory = "../metamath-logic" },
-    { name = "metamath-prelude", directory = "../metamath-prelude" },
-    { name = "proof-scaffold", specifier = "==0.0.5" },
+    { name = "metamath-logic", editable = "../metamath-logic" },
+    { name = "metamath-prelude", editable = "../metamath-prelude" },
+    { name = "proof-scaffold", editable = "../proof-scaffold" },
 ]
 
 [package.metadata.requires-dev]
@@ -261,11 +261,17 @@ dev = [
 [[package]]
 name = "proof-scaffold"
 version = "0.0.5"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b0/d6/cba2aa5298bf331be1c6b8728f71329faee7e6fda5753c7b0a4fa5352283/proof_scaffold-0.0.5.tar.gz", hash = "sha256:79713ad3ccbd96804e7ee9401c0c03b9e00f5a2307952f19f6d771d8710807ba", size = 90079, upload-time = "2026-02-11T19:40:35.166Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/74/aa/7c4caa6cb18c13f21454e88df82243a668141f0fb7d56791653da2177e31/proof_scaffold-0.0.5-py3-none-any.whl", hash = "sha256:f1c487c0ca743b151c664091fa0ee30979adb1d01fd0aac7c1bad43b37509314", size = 103296, upload-time = "2026-02-11T19:40:32.816Z" },
+source = { editable = "../proof-scaffold" }
+
+[package.metadata]
+requires-dist = [
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.5.7" },
+    { name = "types-setuptools", marker = "extra == 'dev'" },
 ]
+provides-extras = ["dev"]
 
 [[package]]
 name = "pygments"
