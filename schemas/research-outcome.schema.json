@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://epistemic-frontier.github.io/proof-lab/schemas/research-outcome.schema.json",
+  "title": "Proof Lab research outcome v1",
+  "description": "Records a discovery workflow result without promoting evidence beyond its declared level.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "outcome_id",
+    "task_id",
+    "status",
+    "outcome",
+    "evidence_level"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "proof-lab-research-outcome-v1"
+    },
+    "outcome_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "task_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "status": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "outcome": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_level": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "normalized_result_claim": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "summary": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "scope": {
+      "type": "object"
+    },
+    "bounds": {
+      "type": "object"
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceReference"
+      }
+    },
+    "reproduction": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "evidenceReference": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "locator"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "kind": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "locator": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "normalized_result_claim",
+          "summary",
+          "evidence"
+        ],
+        "properties": {
+          "outcome": {
+            "enum": [
+              "solved",
+              "counterexample-found",
+              "restricted-case-proved",
+              "bounded-frontier-certified",
+              "inconclusive-but-audited"
+            ]
+          },
+          "evidence": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

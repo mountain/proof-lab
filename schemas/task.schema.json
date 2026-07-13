@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://epistemic-frontier.github.io/proof-lab/schemas/task.schema.json",
+  "title": "Proof Lab task manifest v1",
+  "description": "Common envelope for proof, formalization, and discovery task manifests.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "proof-lab-task-v1"
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "workflow",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "external_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "title": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "workflow": {
+          "enum": [
+            "proof",
+            "formalize",
+            "discover"
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "input_contract": {
+      "type": "object"
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "package_module": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "builder": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "admitted_to_package_build": {
+          "type": "boolean"
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "acceptance": {
+      "type": "object"
+    },
+    "research_state": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "outcome": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "normalized_result_claim": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "legal_outcomes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "complete"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "implementation",
+          "artifacts",
+          "acceptance"
+        ],
+        "properties": {
+          "implementation": {
+            "required": [
+              "admitted_to_package_build"
+            ]
+          },
+          "artifacts": {
+            "required": [
+              "namespace"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "implementation"
+        ],
+        "properties": {
+          "implementation": {
+            "required": [
+              "admitted_to_package_build"
+            ],
+            "properties": {
+              "admitted_to_package_build": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "implementation": {
+            "required": [
+              "builder"
+            ],
+            "properties": {
+              "builder": {
+                "$ref": "#/$defs/nonEmptyString"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

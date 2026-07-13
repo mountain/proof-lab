@@ -1,0 +1,156 @@
+schema_version: proof-lab-claim-ledger-v1
+ledger_status: draft
+source_lock: ../source/source.lock.json
+
+controlled_mapping_values:
+  - exact
+  - relation-reformulation
+  - decomposition
+  - derived-corollary
+  - local-helper
+  - task-added-fidelity-claim
+  - task-added-weakened-consequence
+  - optional-extension
+
+claims:
+  - id: SR-AX-SUCC-EU
+    milestone: theory
+    kind: local-axiom
+    local_label: sr-ax-succ-eu
+    statement: "forall x. exists-unique y. Succ(x, y)"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 2, Axiom 2.1; exact locator pending source lock"
+      mapping: relation-reformulation
+    status: planned
+
+  - id: SR-AX-PRED-EU
+    milestone: theory
+    kind: local-axiom
+    local_label: sr-ax-pred-eu
+    statement: "forall x. exists-unique y. Pred(x, y)"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 2, Axiom 2.2; exact locator pending source lock"
+      mapping: relation-reformulation
+    status: planned
+
+  - id: SR-M1-LOWER-SELF
+    milestone: M1
+    kind: theorem
+    local_label: sr-lower-self
+    statement: "Lower(x) -> x notin x"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 4, Lemma 4.1; exact locator pending source lock"
+      mapping: exact
+    expected_dependencies:
+      definitions: [SR-DEF-LOWER]
+      local_axioms: []
+      forbidden: [comprehension, foundation, extensionality]
+    status: planned
+
+  - id: SR-M1-UPPER-SELF
+    milestone: M1
+    kind: theorem
+    local_label: sr-upper-self
+    statement: "Upper(x) -> x in x"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 4, Lemma 4.2; exact locator pending source lock"
+      mapping: exact
+    expected_dependencies:
+      definitions: [SR-DEF-UPPER]
+      local_axioms: []
+      forbidden: [comprehension, foundation, extensionality]
+    status: planned
+
+  - id: SR-M1-NO-LOWER-UPPER
+    milestone: M1
+    kind: theorem
+    local_label: sr-no-lower-upper
+    statement: "not (Lower(x) and Upper(x))"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 4, Corollary 4.3; exact locator pending source lock"
+      mapping: exact
+    status: planned
+
+  - id: SR-M2-PRED-NO-SELF
+    milestone: M2
+    kind: theorem
+    local_label: sr-pred-no-self
+    statement: "Pred(x, y) -> x notin y"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: pending
+      mapping: local-helper
+    status: planned
+
+  - id: SR-M2-SUCC-HAS-SELF
+    milestone: M2
+    kind: theorem
+    local_label: sr-succ-has-self
+    statement: "Succ(x, y) -> x in y"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: pending
+      mapping: local-helper
+    status: planned
+
+  - id: SR-M4-LOWER-HAS-ASCENDING-STEP
+    milestone: M4
+    kind: theorem
+    local_label: sr-lower-has-ascending-step
+    statement: "Lower(x) -> exists y. LowerAscendingLink(x, y)"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Theorem 5.6 mapping pending source lock"
+      mapping: task-added-fidelity-claim
+    expected_dependencies:
+      local_axioms: [SR-AX-SUCC-EU]
+    status: planned
+
+  - id: SR-M4-UPPER-HAS-DESCENDING-STEP
+    milestone: M4
+    kind: theorem
+    local_label: sr-upper-has-descending-step
+    statement: "Upper(x) -> exists y. UpperDescendingLink(x, y)"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Theorem 5.6 mapping pending source lock"
+      mapping: task-added-fidelity-claim
+    expected_dependencies:
+      local_axioms: [SR-AX-PRED-EU]
+    status: planned
+
+  - id: SR-M5-STRICT-CONTRADICTION
+    milestone: M5
+    kind: theorem
+    local_label: sr-strict-contradiction
+    statement: "StrictRussellian(r) -> false"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 6, Theorem 6.1 mapping pending source lock"
+      mapping: decomposition
+    status: planned
+
+  - id: SR-M5-SUCC-COEXTENSIVE
+    milestone: M5
+    kind: optional-theorem
+    local_label: sr-strict-succ-coextensive
+    statement: "StrictRussellian(r) and Succ(r, y) -> Coextensive(y, r)"
+    source:
+      source_id: sheridan-arxiv-2103.00090v5
+      locator: "Section 6, Theorem 6.1 mapping pending source lock"
+      mapping: task-added-weakened-consequence
+    proof_mode: undecided
+    equality_bridge: forbidden-unless-explicitly-added
+    status: planned
+
+ledger_completion_requirements:
+  - add every primitive and definition
+  - add every M3 and M4 conditional theorem
+  - add StrictImpliesLower and StrictImpliesUpper
+  - resolve every source locator against the locked source
+  - link every emitted assertion to generated proof evidence

@@ -1,0 +1,52 @@
+schema_version: proof-lab-task-v1
+
+task:
+  id: task_02
+  external_id: PS-PAPER-001
+  title: Sheridan Paper to Formalization
+  workflow: formalize
+  status: scaffolded
+
+input_contract:
+  source_document: known-but-not-locked
+  formal_statement: to-be-extracted
+  assumption_boundary: to-be-audited
+  expected_answer: known-from-source
+
+source:
+  lock: source/source.lock.json
+  claim_ledger: claims/claims.yaml
+  scope:
+    sections: ["2", "3", "4", "5", "6"]
+
+formalization:
+  strategy: relation-first
+  logic_profile: classical-first-order-logic-with-equality
+  signature:
+    membership:
+      ownership: audit-pending
+    set-predicate:
+      ownership: local
+  local_axioms: [successor-exists-unique, predecessor-exists-unique]
+  unique_existence_encoding: undecided
+  extensionality: omitted
+
+implementation:
+  builder: null
+  admitted_to_package_build: false
+  blocked_until:
+    - primary-source-lock-complete
+    - interpretation-and-assumption-audit-complete
+    - released-fol-capability-gate-passes
+
+artifacts:
+  namespace: artifacts/task_02
+
+acceptance:
+  minimum: M1-and-M2-verified-with-complete-evidence
+  complete: M4-verified-including-existential-improvement-steps
+  extended: core-M5-classified-and-verified
+  optional_extension: function-notation
+  forbid_raw_fallback: true
+  forbid_hidden_extensionality: true
+  forbid_unrestricted_comprehension: true

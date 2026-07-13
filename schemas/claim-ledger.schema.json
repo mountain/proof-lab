@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://epistemic-frontier.github.io/proof-lab/schemas/claim-ledger.schema.json",
+  "title": "Proof Lab claim ledger v1",
+  "description": "Maps source claims to local statements, statuses, and evidence classifications.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ledger_status",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "proof-lab-claim-ledger-v1"
+    },
+    "task_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "ledger_status": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "evidence_level": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "source_lock": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "controlled_mapping_values": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceMapping": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "locator": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mapping": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "id",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "milestone": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "local_label": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "statement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source": {
+          "$ref": "#/$defs/sourceMapping"
+        },
+        "status": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidence_level": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "ledger_status"
+        ],
+        "properties": {
+          "ledger_status": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "task_id",
+          "evidence_level",
+          "source_lock"
+        ],
+        "properties": {
+          "claims": {
+            "minItems": 1,
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/claim"
+                },
+                {
+                  "required": [
+                    "statement",
+                    "source",
+                    "evidence_level"
+                  ],
+                  "properties": {
+                    "source": {
+                      "required": [
+                        "source_id",
+                        "locator",
+                        "mapping"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

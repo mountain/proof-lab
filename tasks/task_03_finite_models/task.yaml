@@ -1,0 +1,109 @@
+schema_version: proof-lab-task-v1
+
+task:
+  id: task_03
+  external_id: PS-RESEARCH-001
+  title: Finite Models of Sheridan's Two-Axiom Theory
+  workflow: discover
+  status: research
+
+input_contract:
+  research_question: "Do Sheridan's successor and predecessor axioms have a finite model?"
+  formal_statement: to-be-locked
+  theory_boundary: to-be-locked
+  expected_answer: unknown
+
+research_state:
+  phase: problem-definition
+  outcome: null
+  normalized_result_claim: null
+  legal_outcomes:
+    - solved
+    - counterexample-found
+    - restricted-case-proved
+    - bounded-frontier-certified
+    - inconclusive-but-audited
+
+theory_profile:
+  logic: classical-first-order-logic-with-equality
+  domain_convention: nonempty
+  signature:
+    - membership-binary-relation
+    - set-unary-predicate
+  intended_axioms:
+    - successor-exists-unique
+    - predecessor-exists-unique
+  forbidden_hidden_assumptions:
+    - unrestricted-comprehension
+    - separation
+    - foundation
+    - extensionality
+    - every-object-is-a-set
+    - successor-and-predecessor-are-inverses
+
+research_program:
+  stages:
+    - semantics-lock
+    - finite-model-search
+    - toggle-invariant
+    - finite-cycle-lemma
+    - no-finite-model-certificate
+    - audited-report
+
+metatheory_gate:
+  status: blocked
+  protected_claim: NoFiniteModel
+  rationale: >-
+    NoFiniteModel is a statement about models of the object theory, not a theorem
+    expressed inside Sheridan's object theory.
+  requirements:
+    - lock-a-host-metatheory
+    - formalize-finite-structures
+    - formalize-satisfaction-or-an-adequate-direct-semantics
+    - formalize-the-finiteness-premise
+    - verify-the-bridge-from-object-axioms-to-model-semantics
+    - obtain-independent-verifier-acceptance
+  policy_before_gate_opens: >-
+    Finite searches may support bounded-frontier-certified or
+    inconclusive-but-audited outcomes, and a checked finite witness may support
+    counterexample-found, but absence of witnesses must not be reported as solved.
+
+implementation:
+  builder: null
+  admitted_to_package_build: false
+  blocked_until:
+    - problem-semantics-locked
+    - terminal-evidence-gate-passes
+    - formal-promotion-approved
+
+artifacts:
+  namespace: artifacts/task_03
+  required_records:
+    - experiment-manifests
+    - conjecture-ledger
+    - certificates
+    - dependency-and-assumption-record
+    - final-report
+
+computational_certification:
+  witness_policy:
+    - canonical-serialization
+    - checker-independent-from-producer
+    - validate-every-axiom-instance
+  negative_bound_policy:
+    - independently-checked-unsat-certificate-or-replayable-exhaustive-enumeration
+    - validate-encoding-adequacy
+    - record-exact-bounds
+  encoding_audit:
+    - equality-as-identity
+    - quantifier-expansion
+    - unique-existence-encoding
+    - assignment-to-structure-correspondence
+    - symmetry-breaking-preserves-satisfiability
+
+acceptance:
+  require_exactly_one_legal_terminal_outcome: true
+  require_reproducible_evidence: true
+  require_independent_witness_checking: true
+  forbid_research_imports_in_formal_build: true
+  forbid_unverified_no-finite-model-claim: true

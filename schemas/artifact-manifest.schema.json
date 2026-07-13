@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://epistemic-frontier.github.io/proof-lab/schemas/artifact-manifest.schema.json",
+  "title": "Proof Lab artifact manifest v1",
+  "description": "Identifies a generated artifact and the evidence supporting its declared status.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_id",
+    "task_id",
+    "status",
+    "evidence_level"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "proof-lab-artifact-manifest-v1"
+    },
+    "artifact_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "task_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "status": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "evidence_level": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "artifact_type": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_revision": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "producer": {
+      "type": "object"
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/output"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceReference"
+      }
+    },
+    "formal_verification": {
+      "type": "object"
+    },
+    "computational_certification": {
+      "type": "object"
+    },
+    "audit_evidence": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "output": {
+      "type": "object",
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "media_type": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evidenceReference": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "locator"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "kind": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "locator": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "produced_at",
+          "outputs",
+          "evidence"
+        ],
+        "properties": {
+          "outputs": {
+            "minItems": 1,
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/output"
+                },
+                {
+                  "required": [
+                    "sha256"
+                  ]
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

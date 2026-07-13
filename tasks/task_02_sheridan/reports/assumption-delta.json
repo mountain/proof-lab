@@ -1,0 +1,69 @@
+{
+  "schema_version": "proof-lab-assumption-delta-v1",
+  "status": "provisional",
+  "entries": [
+    {
+      "id": "AD-CLASSICAL-FOL-EQUALITY",
+      "category": "imported-logical-substrate",
+      "paper_position": "Classical first-order logic with equality",
+      "local_formalization": "Import the released generic FOL and equality substrate",
+      "classification": "exact-pending-source-check",
+      "affected_claims": ["all"]
+    },
+    {
+      "id": "AD-NONEMPTY-DOMAIN",
+      "category": "semantic-convention",
+      "paper_position": "To be confirmed",
+      "local_formalization": "Use the standard nonempty first-order domain convention",
+      "classification": "open",
+      "affected_claims": ["all"]
+    },
+    {
+      "id": "AD-RELATION-ENCODING",
+      "category": "representation",
+      "paper_position": "Successor and predecessor are described with functional notation after unique existence",
+      "local_formalization": "Use Succ(x,y) and Pred(x,y) relations first",
+      "classification": "representation-only",
+      "affected_claims": ["M2", "M3", "M4", "M5"]
+    },
+    {
+      "id": "AD-EXTENSIONALITY",
+      "category": "deliberately-omitted",
+      "paper_position": "Usage to be audited",
+      "local_formalization": "No coextensiveness-to-equality bridge",
+      "classification": "omitted",
+      "affected_claims": ["M5"]
+    },
+    {
+      "id": "AD-COMPREHENSION",
+      "category": "deliberately-omitted",
+      "paper_position": "Not a local axiom of the selected theory",
+      "local_formalization": "Forbid unrestricted Comprehension and abstraction",
+      "classification": "exact-pending-source-check",
+      "affected_claims": ["all"]
+    },
+    {
+      "id": "AD-ALL-OBJECTS-SETS",
+      "category": "deliberately-omitted",
+      "paper_position": "The set predicate avoids a commitment about urelements",
+      "local_formalization": "Do not assume forall x. set(x)",
+      "classification": "exact-pending-source-check",
+      "affected_claims": ["all"]
+    },
+    {
+      "id": "AD-EXPLOSION",
+      "category": "imported-logical-substrate",
+      "paper_position": "Classical consequence under an inconsistent strict Russellian antecedent",
+      "local_formalization": "Allow classical explosion but require proof-mode disclosure",
+      "classification": "audit-required",
+      "affected_claims": ["M5"]
+    }
+  ],
+  "completion_requirements": [
+    "cite every paper position from locked source bytes",
+    "record native or expanded unique existence",
+    "record equality reflexivity and substitutivity dependencies",
+    "record whether membership is imported or declared locally",
+    "record every strengthened, weakened, or added assumption"
+  ]
+}

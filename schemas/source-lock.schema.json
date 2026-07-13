@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://epistemic-frontier.github.io/proof-lab/schemas/source-lock.schema.json",
+  "title": "Proof Lab source lock v1",
+  "description": "Pins the exact source material used for claim extraction and formalization.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "lock_status",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "proof-lab-source-lock-v1"
+    },
+    "task_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "lock_status": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "evidence_level": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "author": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "scope": {
+      "type": "object"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "comparison": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "role": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "canonical_url": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retrieved_at": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "media_type": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "byte_length": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "lock_status"
+        ],
+        "properties": {
+          "lock_status": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "task_id",
+          "evidence_level",
+          "title"
+        ],
+        "properties": {
+          "sources": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/source"
+                },
+                {
+                  "required": [
+                    "canonical_url",
+                    "retrieved_at",
+                    "byte_length",
+                    "sha256"
+                  ],
+                  "properties": {
+                    "canonical_url": {
+                      "type": "string",
+                      "minLength": 1,
+                      "format": "uri"
+                    },
+                    "retrieved_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "byte_length": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "sha256": {
+                      "$ref": "#/$defs/sha256"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

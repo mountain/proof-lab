@@ -39,6 +39,9 @@ dependencies = [
     "metamath-logic==0.0.6",
 ]
 
+[project.scripts]
+proof-lab-tasks = "proof_lab.task_runner:main"
+
 [project.urls]
 Homepage = "https://github.com/epistemic-frontier/proof-lab"
 Repository = "https://github.com/epistemic-frontier/proof-lab"

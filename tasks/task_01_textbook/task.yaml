@@ -1,0 +1,38 @@
+schema_version: proof-lab-task-v1
+
+task:
+  id: task_01
+  external_id: PS-PROOF-001
+  title: Propositional Proof Reconstruction
+  workflow: proof
+  status: active
+
+input_contract:
+  statement: known
+  theory: known
+  expected_answer: known
+
+implementation:
+  package_module: proof_lab.tasks.task_01_textbook.proofs
+  builder: proof_lab.tasks.task_01_textbook.builder:build_task
+  admitted_to_package_build: true
+
+proofs:
+  - function: prove_mp2
+    theorem: mp2
+    role: proof-construction
+  - function: prove_modus_tollens
+    theorem: modus_tollens
+    role: proof-construction
+  - function: prove_linearity
+    theorem: linearity
+    role: dependency-resolution-smoke-test
+
+artifacts:
+  namespace: artifacts/task_01
+
+acceptance:
+  require_verifier_acceptance: true
+  require_dependency_closure: true
+  require_proof_trace: planned
+  forbid_raw_fallback: true
