@@ -10,9 +10,11 @@ Additionally, the `proof-lab` *package build* aggregates all `prove_*.py` script
 ## Versioning
 
 - Package version: `0.0.1`
-- ProofScaffold dependency: `proof-scaffold==0.0.5`
-- Prelude dependency: `metamath-prelude==0.0.2`
-- Logic dependency: `metamath-logic==0.0.2`
+- ProofScaffold dependency: `proof-scaffold==0.0.9`
+- Prelude dependency: `metamath-prelude==0.0.5`
+- Logic dependency: `metamath-logic==0.0.6`
+
+The lockfile resolves these published releases directly; sibling checkouts are not substituted.
 
 ## Installation
 

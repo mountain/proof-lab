@@ -98,20 +98,26 @@ def build(ctx: BuildContextV2) -> None:
     if unresolved:
         raise RuntimeError(f"unresolved lemma references: {sorted(unresolved)}")
 
+    # Resolve every dependency-owned label to its exported SymbolId.  Falling
+    # back to ``mm.sym.label(name)`` would create a proof-lab-local label with
+    # the same spelling; the linker then has to rename it, leaving proof steps
+    # such as ``ax-1`` or ``wa`` pointed at an assertion that was never emitted.
+    external_labels = {
+        **prelude.as_dict(),
+        **logic.as_dict(),
+        "mp": logic["ax-mp"],
+        "A1": logic["ax-1"],
+        "A2": logic["ax-2"],
+        "A3": logic["ax-3"],
+    }
+
     emit_lowered_lemmas(
         mm,
         system,
         list(lemma_by_name.values()),
         typecode=provable,
         wff_typecode=wff,
-        label_ids={
-            "wi": prelude["wi"],
-            "wn": prelude["wn"],
-            "mp": logic["ax-mp"],
-            "A1": logic["ax-1"],
-            "A2": logic["ax-2"],
-            "A3": logic["ax-3"],
-        },
+        label_ids=external_labels,
         floating_by_var={
             prelude["ph"]: prelude["wph"],
             prelude["ps"]: prelude["wps"],

@@ -34,9 +34,9 @@ classifiers = [
 ]
 
 dependencies = [
-    "proof-scaffold==0.0.5",
-    "metamath-prelude==0.0.2",
-    "metamath-logic==0.0.2",
+    "proof-scaffold==0.0.9",
+    "metamath-prelude==0.0.5",
+    "metamath-logic==0.0.6",
 ]
 
 [project.urls]
@@ -72,8 +72,3 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-
-[tool.uv.sources]
-proof-scaffold = { path = "../proof-scaffold", editable = true }
-metamath-prelude = { path = "../metamath-prelude", editable = true }
-metamath-logic = { path = "../metamath-logic", editable = true }
