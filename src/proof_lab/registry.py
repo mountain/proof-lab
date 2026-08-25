@@ -107,6 +107,15 @@ _TASKS = {
         manifest_path="tasks/task_05_epistemic_puzzles/task.yaml",
         artifact_namespace="artifacts/task_05",
     ),
+    "task_06": TaskSpec(
+        task_id="task_06",
+        slug="dining-cryptographers",
+        title="Dining Cryptographers Security Demo",
+        kind="formalize",
+        status="active",
+        manifest_path="tasks/task_06_dining_cryptographers/task.yaml",
+        artifact_namespace="artifacts/task_06",
+    ),
 }
 
 TASKS: Mapping[str, TaskSpec] = MappingProxyType(_TASKS)

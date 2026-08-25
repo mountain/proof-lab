@@ -1,0 +1,48 @@
+schema_version: proof-lab-task-v1
+
+task:
+  id: task_06
+  external_id: PS-SECURITY-001
+  title: Dining Cryptographers Security Demo
+  workflow: formalize
+  status: active
+
+input_contract:
+  source_protocol: chaum-1988-three-diner-instance
+  semantic_profile: finite-multi-agent-s5-with-public-transcript
+  probability_model: independent-uniform-shared-bits
+
+source:
+  problem: problem/protocol.md
+  references: REFERENCES.md
+  claim_ledger: claims/claims.yaml
+
+formalization:
+  standard_topology: three-party-cycle
+  worlds: 32
+  world_factors:
+    payers: 4
+    shared_coin_assignments: 8
+  participant_observation: incident-coins-and-self-payment
+  outsider_observation: public-transcript-only
+  public_announcement: simultaneous-exact-three-bit-transcript
+  red_team_topology: alice-bob-edge-with-isolated-carol
+
+implementation:
+  semantic_module: proof_lab.tasks.task_06_dining_cryptographers
+  builder: null
+  admitted_to_package_build: false
+
+artifacts:
+  namespace: artifacts/task_06
+
+acceptance:
+  require_all_32_standard_worlds: true
+  require_protocol_correctness: true
+  require_outsider_anonymity: true
+  require_nonpayer_participant_anonymity: true
+  require_exact_distribution_equality: true
+  require_disconnected_topology_attack_witness: true
+  require_existing_formal_build_to_remain_verified: true
+  evidence_level: computational-exhaustive-finite-model
+  promotion_gate: proof-producing-modal-and-counting-lowering

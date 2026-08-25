@@ -1,0 +1,80 @@
+schema_version: proof-lab-claim-ledger-v1
+task_id: task_06
+ledger_status: complete
+evidence_level: computational-exhaustive-finite-model
+source_lock: ../REFERENCES.md
+
+controlled_mapping_values:
+  - finite-protocol-encoding
+  - epistemic-security-property
+  - exact-distribution-count
+  - local-counterexample-topology
+
+claims:
+  - id: DC-CORRECTNESS
+    milestone: finite-security-semantics
+    kind: protocol-correctness
+    local_label: semantic-check-only
+    statement: "In all 32 triangle worlds, transcript parity is odd exactly when a cryptographer paid, and Eve knows that case after the transcript."
+    source:
+      source_id: chaum-1988
+      locator: "REFERENCES.md#primary-protocol-source"
+      mapping: finite-protocol-encoding
+    status: computationally-verified
+    evidence_level: exhaustive-32-world-model
+
+  - id: DC-OUTSIDER-ANONYMITY
+    milestone: finite-security-semantics
+    kind: outsider-anonymity
+    local_label: semantic-check-only
+    statement: "In every cryptographer-paid triangle world, Eve's payer candidates after the public transcript are exactly Alice, Bob, and Carol."
+    source:
+      source_id: chaum-1988
+      locator: "REFERENCES.md#primary-protocol-source"
+      mapping: epistemic-security-property
+    status: computationally-verified
+    evidence_level: exhaustive-24-cryptographer-paid-worlds
+
+  - id: DC-PARTICIPANT-ANONYMITY
+    milestone: finite-security-semantics
+    kind: honest-nonpayer-anonymity
+    local_label: semantic-check-only
+    statement: "In every cryptographer-paid triangle world, each honest non-payer retains exactly the other two participants as payer candidates."
+    source:
+      source_id: chaum-1988
+      locator: "REFERENCES.md#local-specialization-and-new-counterexample"
+      mapping: epistemic-security-property
+    status: computationally-verified
+    evidence_level: exhaustive-48-nonpayer-views
+
+  - id: DC-EXACT-DISTRIBUTION
+    milestone: finite-security-semantics
+    kind: distributional-anonymity
+    local_label: exact-counting-only
+    statement: "Under uniform independent triangle-edge bits, Alice-, Bob-, and Carol-paid transcript distributions are identical: every odd transcript has multiplicity two."
+    source:
+      source_id: chaum-1988
+      locator: "REFERENCES.md#local-specialization-and-new-counterexample"
+      mapping: exact-distribution-count
+    status: computationally-verified
+    evidence_level: exhaustive-eight-coin-assignments-per-payer
+
+  - id: DC-DISCONNECTED-ATTACK
+    milestone: finite-security-semantics
+    kind: counterexample
+    local_label: executable-red-team-witness
+    statement: "On the Alice--Bob-only graph all six cryptographer-paid worlds breach full three-party outsider anonymity, and Carol is uniquely identified in both worlds where she pays."
+    source:
+      source_id: proof-lab-local-attack
+      locator: "../problem/protocol.md#deliberately-broken-topology"
+      mapping: local-counterexample-topology
+    status: computationally-verified
+    evidence_level: exhaustive-eight-world-counterexample-model
+
+ledger_completion_requirements:
+  - preserve deterministic payer, edge, and transcript ordering
+  - validate S5 accessibility invariants
+  - count complete bit spaces rather than sample executions
+  - keep semantic code outside the formal package builder
+  - state idealized security assumptions and excluded adversaries
+  - do not relabel computational evidence as a Metamath theorem

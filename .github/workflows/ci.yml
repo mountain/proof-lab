@@ -46,6 +46,7 @@ jobs:
           --schemafile schemas/task.schema.json
           tasks/task_04_hats/task.yaml
           tasks/task_05_epistemic_puzzles/task.yaml
+          tasks/task_06_dining_cryptographers/task.yaml
 
       - name: Validate claim ledgers
         run: >-
@@ -53,6 +54,7 @@ jobs:
           --schemafile schemas/claim-ledger.schema.json
           tasks/task_04_hats/claims/claims.yaml
           tasks/task_05_epistemic_puzzles/claims/claims.yaml
+          tasks/task_06_dining_cryptographers/claims/claims.yaml
 
   formal-verification:
     name: Admitted package verification
