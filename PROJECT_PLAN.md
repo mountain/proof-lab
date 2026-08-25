@@ -3,7 +3,7 @@
 - Status: Active
 - Plan version: 1
 - Last updated: 2026-08-25
-- Current checkpoint: Tasks 1 and 4 are admitted; Task 5 supplies quarantined finite epistemic evidence.
+- Current checkpoint: Tasks 1 and 4 are admitted; Tasks 5 and 6 supply quarantined finite epistemic and security-protocol evidence.
 
 ## 1. Mission
 
@@ -110,6 +110,12 @@ proof-lab/
       claims/
       reports/
 
+    task_06_dining_cryptographers/
+      task.yaml
+      problem/
+      claims/
+      reports/
+
   src/proof_lab/
     registry.py
     task_runner.py
@@ -127,6 +133,8 @@ proof-lab/
         hats.py
         cheryl.py
         muddy_children.py
+      task_06_dining_cryptographers/
+        protocol.py
 
   artifacts/
     task_01/
@@ -134,6 +142,7 @@ proof-lab/
     task_03/
     task_04/
     task_05/
+    task_06/
 
   schemas/
     README.md
@@ -180,6 +189,7 @@ skfd verify proof-lab:task_02
 skfd verify proof-lab:task_03
 skfd verify proof-lab:task_04
 skfd verify proof-lab:task_05
+skfd verify proof-lab:task_06
 skfd verify proof-lab:all
 ```
 

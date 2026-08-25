@@ -11,6 +11,7 @@ difficult a theorem appears.
 | Task 3 | **Discover** | Research question | Certified theorem, counterexample, restricted result, bounded frontier, or audited inconclusion | Quarantined research |
 | Task 4 | **Formalize** | Five-hat puzzle and intended answer | Verified propositional core with an explicit epistemic boundary | Admitted |
 | Task 5 | **Formalize** | Three finite epistemic puzzles | Executable S5/public-announcement traces | Computationally certified; quarantined |
+| Task 6 | **Formalize** | Chaum's three-diner protocol | Executable correctness, anonymity, distribution, and attack evidence | Computationally certified; quarantined |
 
 The progression is an uncertainty chain:
 
@@ -46,6 +47,7 @@ tasks/                          durable task records and research evidence
   task_03_finite_models/        research-to-proof pipeline
   task_04_hats/                 small puzzle-to-formalization pipeline
   task_05_epistemic_puzzles/    finite public-announcement evidence
+  task_06_dining_cryptographers/ finite security-protocol evidence
 src/proof_lab/
   epistemic/                    finite S5/public-announcement semantics
   registry.py                   task catalogue and explicit admission plan
@@ -54,6 +56,7 @@ src/proof_lab/
   tasks/task_01_textbook/       installed Task 1 implementation
   tasks/task_04_hats/           installed Task 4 implementation
   tasks/task_05_epistemic_puzzles/ executable Task 5 semantic models
+  tasks/task_06_dining_cryptographers/ executable Task 6 protocol model
 artifacts/                      generated-evidence namespaces
 schemas/                        minimal v1 evidence contracts
 ```
@@ -105,6 +108,15 @@ outside `PACKAGE_TASK_IDS`. The implementation is written as an executable essay
 sources and puzzle provenance collected in
 [`tasks/task_05_epistemic_puzzles/REFERENCES.md`](tasks/task_05_epistemic_puzzles/REFERENCES.md).
 
+### Task 6 — Formalize
+
+Task 6 applies the same finite semantics to Chaum's Dining Cryptographers protocol. Its standard
+model exhausts `4 × 2³ = 32` worlds and checks correctness, outsider anonymity, honest non-payer
+anonymity, and exact equality of the three cryptographer-paid transcript distributions. The same
+topology-generic model then removes Carol's shared edges and finds concrete anonymity breaches,
+showing that functional correctness alone is not a security proof. See
+[`tasks/task_06_dining_cryptographers/README.md`](tasks/task_06_dining_cryptographers/README.md).
+
 ## Toolchain
 
 - Proof Lab: `0.0.1`
@@ -136,7 +148,16 @@ uv run --frozen proof-lab-tasks show task_02
 Run the finite epistemic evidence suite:
 
 ```bash
-uv run --frozen python -m pytest tests/test_finite_epistemic.py tests/test_epistemic_puzzles.py
+uv run --frozen python -m pytest \
+  tests/test_finite_epistemic.py \
+  tests/test_epistemic_puzzles.py \
+  tests/test_dining_cryptographers.py
+```
+
+Render the Dining Cryptographers audit report:
+
+```bash
+uv run --frozen python -m proof_lab.tasks.task_06_dining_cryptographers
 ```
 
 Run the admitted proof scripts independently:

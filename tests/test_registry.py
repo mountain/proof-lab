@@ -22,7 +22,14 @@ def test_repository_has_one_proofscaffold_build_entrypoint() -> None:
 
 
 def test_registry_describes_admitted_and_quarantined_tasks() -> None:
-    assert tuple(TASKS) == ("task_01", "task_02", "task_03", "task_04", "task_05")
+    assert tuple(TASKS) == (
+        "task_01",
+        "task_02",
+        "task_03",
+        "task_04",
+        "task_05",
+        "task_06",
+    )
     assert PACKAGE_TASK_IDS == ("task_01", "task_04")
 
     task_01 = TASKS["task_01"]
@@ -59,6 +66,14 @@ def test_registry_describes_admitted_and_quarantined_tasks() -> None:
     assert task_05.implementation_module is None
     assert task_05.proofs == ()
 
+    task_06 = TASKS["task_06"]
+    assert task_06.status == "active"
+    assert task_06.kind == "formalize"
+    assert not task_06.buildable
+    assert task_06.builder is None
+    assert task_06.implementation_module is None
+    assert task_06.proofs == ()
+
 
 def test_default_package_plan_admits_only_explicit_tasks() -> None:
     plan = task_runner.resolve_package_plan()
@@ -74,6 +89,7 @@ def test_default_package_plan_admits_only_explicit_tasks() -> None:
         (("task_02",), "no admitted builder"),
         (("task_03",), "no admitted builder"),
         (("task_05",), "no admitted builder"),
+        (("task_06",), "no admitted builder"),
         (("task_99",), "unknown task"),
     ],
 )
@@ -147,6 +163,7 @@ def test_cli_list_reports_admission_without_importing_task_code(
         "task_03\tdiscover\tresearch\tquarantined\tFinite-Model Research to Proof",
         "task_04\tformalize\tactive\tadmitted\tFive-Hat Knowledge Puzzle",
         "task_05\tformalize\tactive\tquarantined\tFinite Public-Announcement Puzzle Suite",
+        "task_06\tformalize\tactive\tquarantined\tDining Cryptographers Security Demo",
     ]
 
 
