@@ -1,3 +1,9 @@
+"""Small semantic laws that make the puzzle traces meaningful.
+
+Puzzle-specific expected answers are not enough: a broken relation or announcement evaluator could
+make all three examples agree by accident. These tests therefore isolate the reusable mechanisms.
+"""
+
 from collections.abc import Hashable
 
 import pytest
@@ -16,6 +22,8 @@ from proof_lab.epistemic import (
 
 
 def test_public_announcement_restricts_worlds_and_information_cells() -> None:
+    """Publicly learning ``p`` turns a two-world uncertainty cell into knowledge of ``p``."""
+
     worlds: tuple[World, ...] = ("p", "not-p")
     valuations: dict[World, frozenset[str]] = {
         "p": frozenset(("p",)),
@@ -42,6 +50,8 @@ def test_public_announcement_restricts_worlds_and_information_cells() -> None:
 
 
 def test_model_rejects_non_reflexive_accessibility() -> None:
+    """The engine refuses a relation that is not S5 instead of evaluating a misleading model."""
+
     with pytest.raises(ModelInvariantError, match="not reflexive"):
         FiniteModel(
             ("w",),
@@ -51,6 +61,8 @@ def test_model_rejects_non_reflexive_accessibility() -> None:
 
 
 def test_unknown_world_and_agent_are_rejected() -> None:
+    """Misspelled model coordinates fail loudly rather than producing a truth value."""
+
     model = FiniteModel(
         ("w",),
         {"w": frozenset()},

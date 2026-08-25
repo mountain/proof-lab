@@ -17,3 +17,11 @@ Determine Cheryl's birthday.
 
 The intended solution is July 16. Each statement is interpreted as a truthful public announcement
 that restricts the common finite model before the next statement is evaluated.
+
+## Source
+
+This is the ten-date version designed by Joseph B. W. Yeo for the 2015 Singapore and Asian Schools
+Math Olympiad. The problem, its history, and its indistinguishability-graph solution are documented
+by van Ditmarsch, Hartley, Kooi, Welton, and Yeo in [“Cheryl's Birthday,” TARK
+2017](https://doi.org/10.4204/EPTCS.251.1). See [../REFERENCES.md](../REFERENCES.md) for the full
+bibliographic record.

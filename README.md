@@ -101,7 +101,9 @@ Task 5 implements finite S5 knowledge and truthful public-announcement model res
 reproduces the five-hat trace `7 -> 6 -> 4`, Cheryl's Birthday trace `10 -> 5 -> 3 -> 1`, and the
 muddy-children cardinality-layer argument for every nonempty actual world through five children.
 These are computationally certified semantic results, not Metamath theorems, so Task 5 remains
-outside `PACKAGE_TASK_IDS`.
+outside `PACKAGE_TASK_IDS`. The implementation is written as an executable essay, with its semantic
+sources and puzzle provenance collected in
+[`tasks/task_05_epistemic_puzzles/REFERENCES.md`](tasks/task_05_epistemic_puzzles/REFERENCES.md).
 
 ## Toolchain
 

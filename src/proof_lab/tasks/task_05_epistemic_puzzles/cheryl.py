@@ -1,3 +1,27 @@
+"""Cheryl's Birthday, told as three successive restrictions of a ten-date model.
+
+Joseph Yeo set this version for the 2015 Singapore and Asian Schools Math Olympiad. A later paper
+coauthored by Yeo gives the puzzle, its provenance, and an indistinguishability-graph solution
+[DHKWY17]. We encode that same graph directly:
+
+* a world is one of the ten candidate dates;
+* Albert's information cells group dates by month;
+* Bernard's information cells group dates by day number.
+
+The conversation then becomes an unusually readable model-checking trace:
+
+``10 -> 5``
+    Albert's first statement rules out May and June. Those months contain 19 or 18, on which Bernard
+    could initially have known the date; Albert could not then know that Bernard was ignorant.
+``5 -> 3``
+    Bernard now knows, ruling out the two remaining dates numbered 14.
+``3 -> 1``
+    Albert now knows. August still offers two alternatives, while July offers only July 16.
+
+Thus the sole survivor is July 16. Full bibliographic details are in
+``tasks/task_05_epistemic_puzzles/REFERENCES.md``.
+"""
+
 from __future__ import annotations
 
 from collections.abc import Hashable
@@ -20,6 +44,8 @@ BERNARD = "bernard"
 
 @dataclass(frozen=True, order=True)
 class Date:
+    """One candidate world; ordering keeps traces stable and human-readable."""
+
     month: str
     day: int
 
@@ -53,7 +79,12 @@ class CherylOutcome:
 
 
 def _cheryl_model() -> FiniteModel:
+    """Turn Cheryl's private messages into two partitions of the date set."""
+
     worlds: tuple[World, ...] = tuple(CANDIDATE_DATES)
+
+    # No separate propositional atoms are needed: the complete state is already represented by the
+    # Date object itself. Knowledge of the date is therefore the singleton-cell predicate below.
     valuations: dict[World, frozenset[str]] = {
         date: frozenset() for date in CANDIDATE_DATES
     }
@@ -71,7 +102,13 @@ def _cheryl_model() -> FiniteModel:
 
 
 def solve_cheryl_birthday() -> CherylOutcome:
+    """Interpret each line as a truthful public announcement, in dialogue order."""
+
     initial = _cheryl_model()
+
+    # Albert says two things at once: his month cell is not a singleton, and every date in that cell
+    # lies in a non-singleton Bernard day cell. This nested knowledge is why the first line conveys
+    # more than the bare statement "Albert does not know".
     albert_first = conjunction(
         Not(KnowsWhichWorld(ALBERT)),
         Knows(ALBERT, Not(KnowsWhichWorld(BERNARD))),
@@ -81,10 +118,13 @@ def solve_cheryl_birthday() -> CherylOutcome:
         label="Albert: I do not know, but I know Bernard does not know",
     )
 
+    # Bernard evaluates his day information after hearing Albert. Singleton day cells now correspond
+    # to July 16, August 15, and August 17; both dates numbered 14 remain indistinguishable.
     after_bernard, bernard_trace = after_albert.announce(
         KnowsWhichWorld(BERNARD),
         label="Bernard: Now I know",
     )
+    # Albert evaluates his month information one last time. July is now a singleton and August is not.
     final, albert_final_trace = after_bernard.announce(
         KnowsWhichWorld(ALBERT),
         label="Albert: Now I know too",

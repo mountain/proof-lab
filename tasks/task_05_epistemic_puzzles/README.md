@@ -12,6 +12,10 @@ The reusable semantic core is installed at `proof_lab.epistemic`. Puzzle models 
 `proof_lab.tasks.task_05_epistemic_puzzles`. Tests exhaust the muddy-children construction for every
 nonempty actual world with one through five children.
 
+The code is organized as an executable essay: module docstrings introduce the mathematical object,
+comments explain each information partition and announcement, and traces retain the exact eliminated
+worlds. [REFERENCES.md](REFERENCES.md) records the semantic sources and puzzle provenance.
+
 ## Evidence level
 
 This task provides **computational certification**, not Metamath formal certification. Its Python

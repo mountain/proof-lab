@@ -1,7 +1,45 @@
-"""A minimal finite S5 model with public-announcement updates.
+"""Finite epistemic models, written as a small executable essay.
 
-This module is executable semantic evidence. It is deliberately not imported by
-``proof_lab.build`` and is not part of the Metamath verifier's trust boundary.
+Why this module exists
+======================
+
+The puzzle programs need to distinguish three things that ordinary propositional logic
+collapses together:
+
+1. a fact is true at the actual world;
+2. an agent knows that fact because it is true at every world the agent still considers
+   possible; and
+3. a public statement changes knowledge by deleting worlds for everybody at once.
+
+The standard mathematical object is a Kripke model ``M = (W, R, V)``. ``W`` is a finite set of
+possible worlds, ``R_i`` records which worlds agent ``i`` cannot distinguish, and ``V`` records
+the atomic facts true at each world. We use S5 information: each ``R_i`` is an equivalence
+relation. This is the usual ideal-agent interpretation in epistemic logic [FHMMV95, VDK07].
+
+The two semantic clauses that do the real work are implemented almost verbatim below::
+
+    M, w |= K_i phi       iff M, v |= phi for every v with w R_i v
+    M|alpha               =   M restricted to worlds satisfying alpha
+
+The second clause is a truthful public announcement in the sense introduced by Plaza [P89].
+It is *not* an assignment that makes ``alpha`` true: it removes the worlds where ``alpha`` was
+false and restricts every information cell to the surviving worlds.
+
+Reading map
+===========
+
+``Formula`` and its dataclasses are syntax. ``FiniteModel.holds`` is the interpreter.
+``FiniteModel.announce`` is model change. ``relation_from_observations`` turns a concrete
+observation—such as "the month Albert heard"—into an S5 relation. The puzzle modules then only
+have to say what the worlds and observations are.
+
+Trust boundary
+==============
+
+This is executable semantic evidence, deliberately not imported by ``proof_lab.build``. The
+Metamath verifier therefore certifies Task 4's lowered propositional theorem, not this Python
+interpreter. See ``tasks/task_05_epistemic_puzzles/REFERENCES.md`` for full references and
+``reports/semantic-boundary.md`` for the precise evidence claim.
 """
 
 from __future__ import annotations
@@ -19,7 +57,11 @@ class ModelInvariantError(ValueError):
 
 
 class Formula:
-    """Marker base class for the finite epistemic formula language."""
+    """Marker base class for syntax trees interpreted by :meth:`FiniteModel.holds`.
+
+    Formula objects intentionally contain no evaluation logic. Keeping syntax as inert data makes
+    the recursive semantic clauses in ``holds`` visible in one place and easy to audit.
+    """
 
 
 @dataclass(frozen=True)
@@ -76,8 +118,11 @@ class Knows(Formula):
 class KnowsWhichWorld(Formula):
     """The agent's current information cell is a singleton.
 
-    In a finite model this abbreviates knowing the complete state. It is useful for
-    puzzles such as Cheryl's Birthday, whose question is which candidate world is actual.
+    In a finite model this abbreviates knowing the complete state: the current information cell
+    contains only the actual world. It is useful for Cheryl's Birthday, where worlds *are* dates.
+
+    This is a convenience predicate rather than a new modal operator. In a fully propositional
+    encoding it could be expanded into knowledge of a complete description of the current world.
     """
 
     agent: Agent
@@ -110,6 +155,12 @@ def knows_whether(agent: Agent, proposition: Formula) -> Formula:
 
 @dataclass(frozen=True)
 class AnnouncementTrace:
+    """An audit record for one public announcement.
+
+    Deterministic world ordering is retained so that a reader can inspect not only the counts but
+    also the exact alternatives removed by a line of dialogue.
+    """
+
     label: str
     before: tuple[World, ...]
     after: tuple[World, ...]
@@ -126,19 +177,29 @@ class AnnouncementTrace:
 
 @dataclass(frozen=True)
 class FiniteModel:
-    """A finite multi-agent Kripke model with S5 accessibility relations."""
+    """A finite multi-agent Kripke model with S5 accessibility relations.
+
+    Construction is deliberately strict. A malformed relation can make a knowledge puzzle appear
+    to work for accidental reasons, so every model validates its complete world table and all three
+    equivalence-relation laws before any formula is evaluated.
+    """
 
     worlds: tuple[World, ...]
     valuations: Mapping[World, frozenset[str]]
     accessibility: Mapping[Agent, Mapping[World, frozenset[World]]]
 
     def __post_init__(self) -> None:
+        # First audit the database-like part of the model. A world must occur exactly once, and its
+        # valuation must be neither missing nor silently supplied for a world outside ``W``.
         world_set = set(self.worlds)
         if len(world_set) != len(self.worlds):
             raise ModelInvariantError("worlds must be unique")
         if set(self.valuations) != world_set:
             raise ModelInvariantError("valuations must be defined for exactly the model worlds")
 
+        # Next audit each agent's indistinguishability relation. Reflexive + symmetric + transitive
+        # is the S5/equivalence-relation condition. The nested checks are intentionally explicit:
+        # these models are tiny, while readable failure messages are valuable evidence.
         for agent, relation in self.accessibility.items():
             if not agent:
                 raise ModelInvariantError("agent names must not be empty")
@@ -180,6 +241,13 @@ class FiniteModel:
             raise KeyError(f"world {world!r} is not in the model") from exc
 
     def holds(self, world: World, formula: Formula) -> bool:
+        """Evaluate ``formula`` at ``world`` by structural recursion.
+
+        The propositional cases follow their ordinary truth tables. The ``Knows`` case is the
+        Kripke clause from the module introduction: universal truth over the agent's current
+        information cell. Because S5 relations are reflexive, knowing ``phi`` also entails that
+        ``phi`` is true at the current world.
+        """
         if world not in self.valuations:
             raise KeyError(f"world {world!r} is not in the model")
 
@@ -200,6 +268,7 @@ class FiniteModel:
                 world, formula.consequent
             )
         if isinstance(formula, Knows):
+            # This universal quantifier is the epistemic heart of the interpreter.
             return all(
                 self.holds(candidate, formula.operand)
                 for candidate in self.accessible(formula.agent, world)
@@ -217,13 +286,23 @@ class FiniteModel:
         *,
         label: str,
     ) -> tuple[FiniteModel, AnnouncementTrace]:
-        """Restrict the model to worlds satisfying a truthful public announcement."""
+        """Return the Plaza-style restriction of the model to worlds satisfying ``formula``.
+
+        Truthfulness is represented by filtering, not mutation: worlds that already satisfy the
+        announcement survive. Accessibility is then restricted to those survivors, which changes
+        what agents know. The original model remains available for before/after comparison.
+        """
         if not label:
             raise ValueError("announcement label must not be empty")
 
+        # Phase 1: determine the public content extension ``[[formula]]_M`` in the old model.
         kept = self.satisfying_worlds(formula)
         kept_set = set(kept)
         eliminated = tuple(world for world in self.worlds if world not in kept_set)
+
+        # Phase 2: take the induced submodel. We do not recompute observations; we intersect every
+        # old information cell with the surviving world set, exactly as public-announcement
+        # semantics requires.
         valuations = {world: self.valuations[world] for world in kept}
         accessibility = {
             agent: {
@@ -241,7 +320,12 @@ def relation_from_observations(
     worlds: Sequence[World],
     observations: Mapping[World, Hashable],
 ) -> dict[World, frozenset[World]]:
-    """Construct the S5 equivalence relation induced by an observation key."""
+    """Construct the S5 equivalence relation induced by an observation key.
+
+    Two worlds are related exactly when the agent receives the same observation in both. Equality
+    of observation keys is automatically reflexive, symmetric, and transitive, so this helper turns
+    concrete puzzle visibility rules into a correct S5 relation by construction.
+    """
     ordered_worlds = tuple(worlds)
     if set(observations) != set(ordered_worlds):
         raise ModelInvariantError("observations must be defined for exactly the model worlds")

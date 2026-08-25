@@ -24,6 +24,9 @@ Consequently Task 5 is registered but quarantined from `PACKAGE_TASK_IDS`. Its r
 and audit a semantic bridge, but only Task 4's lowered propositional theorem is formally certified
 by `mmverify`.
 
+The definitions and puzzle provenance are linked in [../REFERENCES.md](../REFERENCES.md). Those
+sources motivate the model; they do not replace local tests or enlarge the formal trust claim.
+
 ## Promotion gate
 
 The next evidence upgrade is a proof-producing finite compiler: expand each knowledge formula into
