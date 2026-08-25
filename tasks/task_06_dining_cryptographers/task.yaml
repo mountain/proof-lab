@@ -30,8 +30,9 @@ formalization:
 
 implementation:
   semantic_module: proof_lab.tasks.task_06_dining_cryptographers
-  builder: null
-  admitted_to_package_build: false
+  proof_module: proof_lab.tasks.task_06_dining_cryptographers.proofs
+  builder: proof_lab.tasks._propositional_builder:build_tasks
+  admitted_to_package_build: true
 
 artifacts:
   namespace: artifacts/task_06
@@ -43,6 +44,8 @@ acceptance:
   require_nonpayer_participant_anonymity: true
   require_exact_distribution_equality: true
   require_disconnected_topology_attack_witness: true
+  require_formal_32_row_parity_table: true
+  require_formal_24_row_payer_bijection_table: true
   require_existing_formal_build_to_remain_verified: true
-  evidence_level: computational-exhaustive-finite-model
-  promotion_gate: proof-producing-modal-and-counting-lowering
+  evidence_level: mixed-formal-tables-and-computational-epistemics
+  remaining_promotion_gate: proof-producing-modal-lowering

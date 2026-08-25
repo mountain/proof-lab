@@ -11,7 +11,7 @@ difficult a theorem appears.
 | Task 3 | **Discover** | Research question | Certified theorem, counterexample, restricted result, bounded frontier, or audited inconclusion | Quarantined research |
 | Task 4 | **Formalize** | Five-hat puzzle and intended answer | Verified propositional core with an explicit epistemic boundary | Admitted |
 | Task 5 | **Formalize** | Three finite epistemic puzzles | Executable S5/public-announcement traces | Computationally certified; quarantined |
-| Task 6 | **Formalize** | Chaum's three-diner protocol | Executable correctness, anonymity, distribution, and attack evidence | Computationally certified; quarantined |
+| Task 6 | **Formalize** | Chaum's three-diner protocol | Formal finite tables plus executable epistemic and attack evidence | Mixed evidence; table proofs admitted |
 
 The progression is an uncertainty chain:
 
@@ -110,11 +110,12 @@ sources and puzzle provenance collected in
 
 ### Task 6 — Formalize
 
-Task 6 applies the same finite semantics to Chaum's Dining Cryptographers protocol. Its standard
-model exhausts `4 × 2³ = 32` worlds and checks correctness, outsider anonymity, honest non-payer
-anonymity, and exact equality of the three cryptographer-paid transcript distributions. The same
-topology-generic model then removes Carol's shared edges and finds concrete anonymity breaches,
-showing that functional correctness alone is not a security proof. See
+Task 6 applies the same finite semantics to Chaum's Dining Cryptographers protocol. Metamath now
+proves its complete 32-row parity table (`dc_parity_table`) and a 24-row transcript-preserving payer
+bijection table (`dc_payer_bijection_table`). The S5 model separately checks outsider and honest
+non-payer knowledge, exact distribution counts, and a disconnected-topology attack. This is a
+mixed boundary: the two named tables are formal theorems; modal knowledge remains computational.
+See
 [`tasks/task_06_dining_cryptographers/README.md`](tasks/task_06_dining_cryptographers/README.md).
 
 ## Toolchain
@@ -177,7 +178,8 @@ uv run --frozen skfd verify proof-lab --level 1 --coverage declared
 
 The desired future interface is `skfd verify proof-lab:task_01` and
 `skfd verify proof-lab:all`. ProofScaffold 0.0.9 does not yet support namespaced task targets, so
-the package build currently executes the explicit admission tuple, which contains Tasks 1 and 4.
+the package build currently executes the explicit admission tuple, which contains Tasks 1, 4,
+and 6. Task 6 admission covers its two finite propositional tables, not its Python modal evaluator.
 
 ## Development rule
 

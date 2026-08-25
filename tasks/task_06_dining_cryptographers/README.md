@@ -16,23 +16,30 @@ external observer, initially sees nothing. Alice, Bob, and Carol then reveal one
 three-bit public transcript; the shared public-announcement semantics removes every world that
 would have produced a different transcript.
 
-## What is checked
+## What is proved and what is checked
 
-| Claim | Exhaustive result |
-| --- | --- |
-| Correctness | In all 32 worlds, transcript parity is odd exactly when a cryptographer paid. |
-| Public knowledge | After the transcript, Eve knows whether the NSA or a cryptographer paid. |
-| Outsider anonymity | Every cryptographer-paid execution leaves all three diners as Eve's payer candidates. |
-| Participant anonymity | A non-payer retains exactly the other two diners as payer candidates. |
-| Distribution equality | For Alice, Bob, and Carol, each of the four odd transcripts has multiplicity two. |
-| Red-team counterexample | Removing Carol's two shared edges yields six anonymity breaches; Carol is uniquely identified in both worlds where she pays. |
+| Claim | Evidence | Result |
+| --- | --- | --- |
+| Correctness table | Metamath theorem `dc_parity_table` | All 32 rows prove odd parity exactly when a cryptographer paid. |
+| Payer bijection table | Metamath theorem `dc_payer_bijection_table` | All 24 shared-edge-toggle rows preserve the complete transcript. |
+| Public knowledge | Exhaustive S5 model | After the transcript, Eve knows whether the NSA or a cryptographer paid. |
+| Outsider anonymity | Formal bijection table + S5 projection | Every cryptographer-paid execution leaves all three diners as candidates. |
+| Participant anonymity | Exhaustive S5 model | A non-payer retains exactly the other two diners as payer candidates. |
+| Distribution equality | Formal bijection table + exact counting | Each of the four odd transcripts has multiplicity two for every diner. |
+| Red-team counterexample | Exhaustive bad-topology model | Isolating Carol yields six breaches; both Carol-paid worlds identify her. |
 
 The distribution check is exact counting, not sampling. Under the declared assumption that the
 three shared bits are independent and uniform, equal multiplicities are equal transcript
 probabilities. The disconnected counterexample is evaluated by the same generic topology model;
 the test does not contain a separate attacker oracle.
 
-## Reading the executable essay
+## Reading the proof and the executable essay
+
+The actual proof constructors are in
+`src/proof_lab/tasks/task_06_dining_cryptographers/proofs/finite_tables.py`. They contain no `raw`
+steps and no protocol-specific hypotheses. Each Boolean leaf is represented conservatively by the
+theorem `φ → φ` or its negation; each XOR node is derived from `df-xor` and ordinary propositional
+lemmas. The two root labels are admitted through `PACKAGE_TASK_IDS` and checked by `mmverify`.
 
 Start with [`problem/protocol.md`](problem/protocol.md) for the protocol and bit convention. Then
 read `src/proof_lab/tasks/task_06_dining_cryptographers/protocol.py` from top to bottom:
@@ -54,11 +61,13 @@ Render the deterministic demo report, then run only its evidence suite with:
 ```bash
 uv run --frozen python -m proof_lab.tasks.task_06_dining_cryptographers
 uv run --frozen pytest -q tests/test_dining_cryptographers.py
+uv run --frozen skfd verify proof-lab --level 1 --coverage declared
 ```
 
 ## Evidence level
 
-Task 6 is exhaustive computational certification for two declared finite models. It is not
-imported by `proof_lab.build`, and its security claims are not Metamath theorems. Promotion requires
-a proof-producing lowering of the finite modal and exact-counting obligations; until then the
-Python evaluator remains part of the disclosed trust base.
+Task 6 now has mixed evidence. Its 32-row correctness table and 24-row transcript-bijection table
+are Metamath theorems. Knowledge, public-model restriction, candidate-set projection, exact finite
+counting, and the disconnected attack still use the disclosed Python evaluator. A proof-producing
+modal lowering remains the next promotion gate; passing the two table proofs does not silently
+promote those epistemic claims.
