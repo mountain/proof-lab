@@ -29,6 +29,7 @@ The following are explicit modeling decisions made by Proof Lab rather than quot
 - exact distribution equality assumes independent uniform edge bits; and
 - the one-edge graph with isolated Carol is a local red-team topology used to demonstrate failure.
 
-The bibliography establishes provenance, not implementation correctness. The local evidence is the
-complete enumeration in `tests/test_dining_cryptographers.py`, and the Python evaluator remains in
-the disclosed computational trust base.
+The bibliography establishes provenance, not implementation correctness. The local evidence now
+has two layers: `proofs/finite_tables.py` emits the parity and transcript-bijection tables accepted
+by Metamath, while `tests/test_dining_cryptographers.py` exhausts the S5 knowledge and attack
+models. The Python evaluator remains in the disclosed trust base only for the latter layer.

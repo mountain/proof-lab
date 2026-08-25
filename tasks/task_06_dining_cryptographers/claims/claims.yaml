@@ -1,27 +1,52 @@
 schema_version: proof-lab-claim-ledger-v1
 task_id: task_06
 ledger_status: complete
-evidence_level: computational-exhaustive-finite-model
+evidence_level: mixed-formal-tables-and-computational-epistemics
 source_lock: ../REFERENCES.md
 
 controlled_mapping_values:
   - finite-protocol-encoding
+  - formal-finite-table
   - epistemic-security-property
   - exact-distribution-count
   - local-counterexample-topology
 
 claims:
-  - id: DC-CORRECTNESS
-    milestone: finite-security-semantics
-    kind: protocol-correctness
-    local_label: semantic-check-only
-    statement: "In all 32 triangle worlds, transcript parity is odd exactly when a cryptographer paid, and Eve knows that case after the transcript."
+  - id: DC-PARITY-TABLE
+    milestone: formal-finite-tables
+    kind: protocol-correctness-table
+    local_label: dc_parity_table
+    statement: "The conjunction of all 32 ground triangle rows proves that transcript parity is odd exactly for cryptographer-paid executions."
     source:
       source_id: chaum-1988
       locator: "REFERENCES.md#primary-protocol-source"
-      mapping: finite-protocol-encoding
+      mapping: formal-finite-table
+    status: formally-verified
+    evidence_level: metamath-mmverify-exhaustive-32-row-table
+
+  - id: DC-PAYER-BIJECTION-TABLE
+    milestone: formal-finite-tables
+    kind: transcript-preserving-bijection-table
+    local_label: dc_payer_bijection_table
+    statement: "All 24 rows prove that moving the payer across a shared edge and toggling that edge preserves the three-bit public transcript."
+    source:
+      source_id: chaum-1988
+      locator: "REFERENCES.md#local-specialization-and-new-counterexample"
+      mapping: formal-finite-table
+    status: formally-verified
+    evidence_level: metamath-mmverify-exhaustive-24-row-table
+
+  - id: DC-PUBLIC-KNOWLEDGE
+    milestone: finite-security-semantics
+    kind: outsider-case-knowledge
+    local_label: semantic-check-only
+    statement: "After every triangle transcript, Eve knows whether the NSA or a cryptographer paid."
+    source:
+      source_id: chaum-1988
+      locator: "REFERENCES.md#primary-protocol-source"
+      mapping: epistemic-security-property
     status: computationally-verified
-    evidence_level: exhaustive-32-world-model
+    evidence_level: exhaustive-32-world-s5-model
 
   - id: DC-OUTSIDER-ANONYMITY
     milestone: finite-security-semantics
@@ -32,8 +57,8 @@ claims:
       source_id: chaum-1988
       locator: "REFERENCES.md#primary-protocol-source"
       mapping: epistemic-security-property
-    status: computationally-verified
-    evidence_level: exhaustive-24-cryptographer-paid-worlds
+    status: mixed-evidence
+    evidence_level: formal-bijection-table-plus-exhaustive-24-world-s5-projection
 
   - id: DC-PARTICIPANT-ANONYMITY
     milestone: finite-security-semantics
@@ -56,8 +81,8 @@ claims:
       source_id: chaum-1988
       locator: "REFERENCES.md#local-specialization-and-new-counterexample"
       mapping: exact-distribution-count
-    status: computationally-verified
-    evidence_level: exhaustive-eight-coin-assignments-per-payer
+    status: mixed-evidence
+    evidence_level: formal-bijection-table-plus-exact-finite-counting
 
   - id: DC-DISCONNECTED-ATTACK
     milestone: finite-security-semantics
@@ -73,8 +98,8 @@ claims:
 
 ledger_completion_requirements:
   - preserve deterministic payer, edge, and transcript ordering
+  - admit only the proof module to the formal package builder
   - validate S5 accessibility invariants
   - count complete bit spaces rather than sample executions
-  - keep semantic code outside the formal package builder
   - state idealized security assumptions and excluded adversaries
-  - do not relabel computational evidence as a Metamath theorem
+  - keep modal knowledge claims computational until their lowering is proof-producing

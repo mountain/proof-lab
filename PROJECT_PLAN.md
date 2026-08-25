@@ -3,7 +3,7 @@
 - Status: Active
 - Plan version: 1
 - Last updated: 2026-08-25
-- Current checkpoint: Tasks 1 and 4 are admitted; Tasks 5 and 6 supply quarantined finite epistemic and security-protocol evidence.
+- Current checkpoint: Tasks 1, 4, and Task 6's finite tables are admitted; Task 5 and Task 6's modal layer remain computational evidence.
 
 ## 1. Mission
 
@@ -135,6 +135,8 @@ proof-lab/
         muddy_children.py
       task_06_dining_cryptographers/
         protocol.py
+        proofs/
+          finite_tables.py
 
   artifacts/
     task_01/
@@ -194,10 +196,12 @@ skfd verify proof-lab:all
 ```
 
 ProofScaffold does not yet provide this target namespace. Until it does, package verification
-builds the registry's default admitted tasks, currently Tasks 1 and 4. Tasks that share a builder
-reference are passed to that builder as one ordered group, preventing duplicate emission of their
-common logic-catalogue closure. The project must not introduce an environment-variable selector
-into release builds because that would make the same package input produce different formal units.
+builds the registry's default admitted tasks, currently Tasks 1, 4, and 6. Task 6 contributes two
+finite propositional tables; its modal evaluator remains outside the proof constructor import
+boundary. Tasks that share a builder reference are passed to that builder as one ordered group,
+preventing duplicate emission of their common logic-catalogue closure. The project must not
+introduce an environment-variable selector into release builds because that would make the same
+package input produce different formal units.
 
 ## 4. Dependency Ownership
 

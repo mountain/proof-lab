@@ -52,8 +52,10 @@ Enumeration is exact for the declared finite models, and ``transcript_distributi
 coin assignments rather than sampling them. It therefore proves equality of the discrete
 transcript distributions *within this model*, assuming independent uniform coins and truthful
 execution. It does not model compromised participants, biased or reused coins, side channels,
-network metadata, or Chaum's general multi-round constructions. It is computational semantic
-evidence, not a theorem emitted into the repository's Metamath package.
+network metadata, or Chaum's general multi-round constructions. The modal conclusions in this
+module are computational semantic evidence. The independent ``proofs/finite_tables.py`` module
+does emit Metamath proofs for the complete parity and payer-bijection tables, but not yet for
+knowledge or public-model restriction.
 
 Reference: [C88] David Chaum, "The Dining Cryptographers Problem: Unconditional Sender and
 Recipient Untraceability," *Journal of Cryptology* 1(1), 1988, pp. 65--75. The primary CWI record

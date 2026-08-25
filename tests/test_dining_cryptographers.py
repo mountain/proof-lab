@@ -5,7 +5,8 @@ sampling error: the triangle has 32 worlds, while the disconnected red-team grap
 """
 
 from proof_lab.epistemic import Knows, Not
-from proof_lab.tasks.task_06_dining_cryptographers import (
+from proof_lab.tasks.task_06_dining_cryptographers.demo import render_demo_report
+from proof_lab.tasks.task_06_dining_cryptographers.protocol import (
     CAROL,
     DISCONNECTED_TOPOLOGY,
     EAVESDROPPER,
@@ -16,7 +17,6 @@ from proof_lab.tasks.task_06_dining_cryptographers import (
     outsider_anonymity_breaches,
     payer_atom,
     payer_candidates,
-    render_demo_report,
     run_protocol,
     transcript_distribution,
     transcript_for,

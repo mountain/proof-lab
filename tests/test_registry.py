@@ -30,7 +30,7 @@ def test_registry_describes_admitted_and_quarantined_tasks() -> None:
         "task_05",
         "task_06",
     )
-    assert PACKAGE_TASK_IDS == ("task_01", "task_04")
+    assert PACKAGE_TASK_IDS == ("task_01", "task_04", "task_06")
 
     task_01 = TASKS["task_01"]
     assert task_01.status == "active"
@@ -69,16 +69,21 @@ def test_registry_describes_admitted_and_quarantined_tasks() -> None:
     task_06 = TASKS["task_06"]
     assert task_06.status == "active"
     assert task_06.kind == "formalize"
-    assert not task_06.buildable
-    assert task_06.builder is None
-    assert task_06.implementation_module is None
-    assert task_06.proofs == ()
+    assert task_06.buildable
+    assert task_06.builder == "proof_lab.tasks._propositional_builder:build_tasks"
+    assert task_06.implementation_module == (
+        "proof_lab.tasks.task_06_dining_cryptographers.proofs"
+    )
+    assert tuple((proof.function, proof.theorem) for proof in task_06.proofs) == (
+        ("prove_dc_parity_table", "dc_parity_table"),
+        ("prove_dc_payer_bijection_table", "dc_payer_bijection_table"),
+    )
 
 
 def test_default_package_plan_admits_only_explicit_tasks() -> None:
     plan = task_runner.resolve_package_plan()
 
-    assert tuple(task.task_id for task in plan) == ("task_01", "task_04")
+    assert tuple(task.task_id for task in plan) == ("task_01", "task_04", "task_06")
 
 
 @pytest.mark.parametrize(
@@ -89,7 +94,6 @@ def test_default_package_plan_admits_only_explicit_tasks() -> None:
         (("task_02",), "no admitted builder"),
         (("task_03",), "no admitted builder"),
         (("task_05",), "no admitted builder"),
-        (("task_06",), "no admitted builder"),
         (("task_99",), "unknown task"),
     ],
 )
@@ -109,6 +113,7 @@ def test_plan_resolution_does_not_import_task_code(monkeypatch: pytest.MonkeyPat
     assert tuple(task.task_id for task in task_runner.resolve_package_plan()) == (
         "task_01",
         "task_04",
+        "task_06",
     )
     with pytest.raises(task_runner.TaskAdmissionError, match="no admitted builder"):
         task_runner.resolve_package_plan(("task_02",))
@@ -132,7 +137,7 @@ def test_build_loads_only_the_admitted_builder(monkeypatch: pytest.MonkeyPatch) 
 
     assert imported_modules == ["proof_lab.tasks._propositional_builder"]
     assert builder_calls == [
-        (context, (TASKS["task_01"], TASKS["task_04"])),
+        (context, (TASKS["task_01"], TASKS["task_04"], TASKS["task_06"])),
     ]
 
 
@@ -163,7 +168,7 @@ def test_cli_list_reports_admission_without_importing_task_code(
         "task_03\tdiscover\tresearch\tquarantined\tFinite-Model Research to Proof",
         "task_04\tformalize\tactive\tadmitted\tFive-Hat Knowledge Puzzle",
         "task_05\tformalize\tactive\tquarantined\tFinite Public-Announcement Puzzle Suite",
-        "task_06\tformalize\tactive\tquarantined\tDining Cryptographers Security Demo",
+        "task_06\tformalize\tactive\tadmitted\tDining Cryptographers Security Demo",
     ]
 
 

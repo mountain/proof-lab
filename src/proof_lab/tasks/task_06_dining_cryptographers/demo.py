@@ -33,7 +33,7 @@ def _render_payers(payers: frozenset[str]) -> str:
 
 
 def render_demo_report() -> str:
-    """Compute and render the standard proof obligations and the red-team witness."""
+    """Compute and render the semantic audit results and the red-team witness."""
 
     standard_worlds = worlds_for(TRIANGLE_TOPOLOGY)
     correct_world_count = sum(
