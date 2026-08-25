@@ -1,0 +1,53 @@
+schema_version: proof-lab-claim-ledger-v1
+task_id: task_05
+ledger_status: complete
+evidence_level: computational-exhaustive-finite-model
+source_lock: ../README.md
+
+controlled_mapping_values:
+  - finite-model-encoding
+  - executable-semantic-bridge
+  - bounded-exhaustive-check
+
+claims:
+  - id: EPI-HATS-BRIDGE
+    milestone: finite-semantics
+    kind: semantic-bridge
+    local_label: semantic-check-only
+    statement: "After Alice's truthful ignorance announcement, Carol-black implies Bob-knows-white."
+    source:
+      source_id: five-hat-local
+      locator: "task_04_hats/problem/problem.md"
+      mapping: executable-semantic-bridge
+    status: computationally-verified
+    evidence_level: exhaustive-seven-world-model
+
+  - id: EPI-CHERYL-SOLUTION
+    milestone: finite-semantics
+    kind: unique-solution
+    local_label: semantic-check-only
+    statement: "The three truthful public announcements leave only July 16."
+    source:
+      source_id: cheryl-local
+      locator: "problems/cheryl-birthday.md"
+      mapping: finite-model-encoding
+    status: computationally-verified
+    evidence_level: exhaustive-ten-world-model
+
+  - id: EPI-MUDDY-BOUNDED
+    milestone: finite-semantics
+    kind: bounded-family
+    local_label: semantic-check-only
+    statement: "For every nonempty actual world and 1 <= n <= 5, muddy children know after k-1 all-no rounds."
+    source:
+      source_id: muddy-local
+      locator: "problems/muddy-children.md"
+      mapping: bounded-exhaustive-check
+    status: computationally-verified
+    evidence_level: exhaustive-through-five-children
+
+ledger_completion_requirements:
+  - preserve deterministic world ordering
+  - validate S5 accessibility invariants
+  - keep semantic code outside the formal package builder
+  - do not relabel bounded computational evidence as a universal formal theorem

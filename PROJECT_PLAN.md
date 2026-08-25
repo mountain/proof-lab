@@ -2,8 +2,8 @@
 
 - Status: Active
 - Plan version: 1
-- Last updated: 2026-07-13
-- Current checkpoint: Phase 0 repository skeleton implemented; Phase 1 evidence work is not started.
+- Last updated: 2026-08-25
+- Current checkpoint: Tasks 1 and 4 are admitted; Task 5 supplies quarantined finite epistemic evidence.
 
 ## 1. Mission
 
@@ -97,19 +97,43 @@ proof-lab/
       proofs/
       reports/
 
+    task_04_hats/
+      task.yaml
+      problem/
+      claims/
+      proofs/
+      reports/
+
+    task_05_epistemic_puzzles/
+      task.yaml
+      problems/
+      claims/
+      reports/
+
   src/proof_lab/
     registry.py
     task_runner.py
     build.py
+    epistemic/
+      finite.py
     tasks/
       task_01_textbook/
         builder.py
         proofs/
+      task_04_hats/
+        builder.py
+        proofs/
+      task_05_epistemic_puzzles/
+        hats.py
+        cheryl.py
+        muddy_children.py
 
   artifacts/
     task_01/
     task_02/
     task_03/
+    task_04/
+    task_05/
 
   schemas/
     README.md
@@ -154,13 +178,16 @@ The desired future CLI is:
 skfd verify proof-lab:task_01
 skfd verify proof-lab:task_02
 skfd verify proof-lab:task_03
+skfd verify proof-lab:task_04
+skfd verify proof-lab:task_05
 skfd verify proof-lab:all
 ```
 
 ProofScaffold does not yet provide this target namespace. Until it does, package verification
-builds the registry's default admitted tasks, currently Task 1. The project must not introduce an
-environment-variable selector into release builds because that would make the same package input
-produce different formal units.
+builds the registry's default admitted tasks, currently Tasks 1 and 4. Tasks that share a builder
+reference are passed to that builder as one ordered group, preventing duplicate emission of their
+common logic-catalogue closure. The project must not introduce an environment-variable selector
+into release builds because that would make the same package input produce different formal units.
 
 ## 4. Dependency Ownership
 
@@ -222,6 +249,8 @@ Proof Lab owns:
 - local theories and task-specific axioms;
 - experiments, conjectures, witnesses, certificates, and research reports;
 - admitted proofs that exercise the upstream stack.
+- quarantined executable semantics, including finite possible-world and public-announcement
+  experiments, until a proof-producing lowering path exists.
 
 Research mechanisms should mature here first. Only stable and domain-independent mechanisms move
 upstream.
@@ -327,9 +356,9 @@ register -> elaborate -> validate -> lower -> link -> verify -> publish evidence
 ```
 
 Task builders should eventually register bundles, not reproduce catalogue closure, external-label
-aliases, floating-variable maps, or verifier plumbing. The current Task 1 `builder.py` is a
-ProofScaffold 0.0.9 compatibility adapter and a concrete list of upstream simplification pressure,
-not the desired long-term public API.
+aliases, floating-variable maps, or verifier plumbing. The current shared propositional group
+builder is a ProofScaffold 0.0.9 compatibility adapter and a concrete list of upstream
+simplification pressure, not the desired long-term public API.
 
 The framework avoids two parallel authoring systems. Humans and LLMs use the same typed operations,
 transactions, and semantic IDs; presentation, context selection, and diagnostics differ at the

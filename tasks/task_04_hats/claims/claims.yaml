@@ -1,0 +1,72 @@
+schema_version: proof-lab-claim-ledger-v1
+task_id: task_04
+ledger_status: complete
+evidence_level: verifier-certified-propositional-core
+source_lock: ../problem/problem.md
+
+controlled_mapping_values:
+  - exact
+  - propositional-abstraction
+  - semantic-bridge
+  - two-color-elaboration
+
+claims:
+  - id: HAT-FACT-A-UNKNOWN
+    milestone: input
+    kind: announcement
+    local_label: hats.1
+    statement: "phi"
+    source:
+      source_id: five-hat-local
+      locator: "problem.md: Alice's answer"
+      mapping: propositional-abstraction
+    status: accepted
+    evidence_level: source-assumption
+
+  - id: HAT-FACT-B-NOT-KNOW-WHITE
+    milestone: input
+    kind: weakened-announcement
+    local_label: hats.2
+    statement: "not chi"
+    source:
+      source_id: five-hat-local
+      locator: "problem.md: Bob's answer"
+      mapping: propositional-abstraction
+    status: accepted
+    evidence_level: source-assumption
+
+  - id: HAT-BRIDGE
+    milestone: interpretation
+    kind: semantic-bridge
+    local_label: hats.3
+    statement: "phi -> (psi -> chi)"
+    source:
+      source_id: five-hat-local
+      locator: "problem.md: Intended reasoning, paragraphs 1-2"
+      mapping: semantic-bridge
+    status: accepted
+    evidence_level: audited-and-executable-seven-world-model
+
+  - id: HAT-CONCLUSION-NOT-BLACK
+    milestone: proof
+    kind: theorem
+    local_label: five_hat_conclusion
+    statement: "not psi"
+    source:
+      source_id: five-hat-local
+      locator: "problem.md: question and intended reasoning"
+      mapping: exact
+    status: verified
+    evidence_level: metamath-verifier-certified
+
+  - id: HAT-CONCLUSION-WHITE
+    milestone: interpretation
+    kind: natural-language-corollary
+    local_label: natural-language-only
+    statement: "Carol wears white"
+    source:
+      source_id: five-hat-local
+      locator: "problem.md: two-color inventory"
+      mapping: two-color-elaboration
+    status: accepted
+    evidence_level: audited-domain-elaboration

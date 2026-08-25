@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Python quality and semantic evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+
+      - name: Install the locked development environment
+        run: uv sync --locked --dev
+
+      - name: Lint
+        run: uv run --frozen ruff check .
+
+      - name: Type-check
+        run: uv run --frozen mypy .
+
+      - name: Run tests
+        run: uv run --frozen pytest
+
+      - name: Validate task manifests
+        run: >-
+          uvx --from check-jsonschema check-jsonschema
+          --schemafile schemas/task.schema.json
+          tasks/task_04_hats/task.yaml
+          tasks/task_05_epistemic_puzzles/task.yaml
+
+      - name: Validate claim ledgers
+        run: >-
+          uvx --from check-jsonschema check-jsonschema
+          --schemafile schemas/claim-ledger.schema.json
+          tasks/task_04_hats/claims/claims.yaml
+          tasks/task_05_epistemic_puzzles/claims/claims.yaml
+
+  formal-verification:
+    name: Admitted package verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+
+      - name: Install the locked development environment
+        run: uv sync --locked --dev
+
+      - name: Verify the admitted package and declared coverage
+        run: uv run --frozen skfd verify proof-lab --level 1 --coverage declared

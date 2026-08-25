@@ -11,6 +11,8 @@ Presence in this directory does not make a task buildable. Formal admission is c
 | `task_01_textbook` | Proof | Active | Admitted |
 | `task_02_sheridan` | Formalize | Scaffolded | Quarantined |
 | `task_03_finite_models` | Discover | Research | Quarantined |
+| `task_04_hats` | Formalize | Active | Admitted |
+| `task_05_epistemic_puzzles` | Formalize | Active | Computational evidence only |
 
 Executable task code that must be included in a wheel lives under `src/proof_lab/tasks/`. Research
 records and generated artifacts must never be imported by the formal package build.
