@@ -21,8 +21,8 @@ def test_repository_has_one_proofscaffold_build_entrypoint() -> None:
     assert tuple(REPOSITORY_ROOT.glob("prove_*.py")) == ()
 
 
-def test_registry_describes_drafts_without_admitting_them() -> None:
-    assert tuple(TASKS) == ("task_01", "task_02", "task_03", "task_04")
+def test_registry_describes_admitted_and_quarantined_tasks() -> None:
+    assert tuple(TASKS) == ("task_01", "task_02", "task_03", "task_04", "task_05")
     assert PACKAGE_TASK_IDS == ("task_01", "task_04")
 
     task_01 = TASKS["task_01"]
@@ -51,8 +51,16 @@ def test_registry_describes_drafts_without_admitting_them() -> None:
         ("prove_five_hat_conclusion", "five_hat_conclusion"),
     )
 
+    task_05 = TASKS["task_05"]
+    assert task_05.status == "active"
+    assert task_05.kind == "formalize"
+    assert not task_05.buildable
+    assert task_05.builder is None
+    assert task_05.implementation_module is None
+    assert task_05.proofs == ()
 
-def test_default_package_plan_admits_only_task_01() -> None:
+
+def test_default_package_plan_admits_only_explicit_tasks() -> None:
     plan = task_runner.resolve_package_plan()
 
     assert tuple(task.task_id for task in plan) == ("task_01", "task_04")
@@ -65,6 +73,7 @@ def test_default_package_plan_admits_only_task_01() -> None:
         (("task_01", "task_01"), "duplicate task"),
         (("task_02",), "no admitted builder"),
         (("task_03",), "no admitted builder"),
+        (("task_05",), "no admitted builder"),
         (("task_99",), "unknown task"),
     ],
 )
@@ -137,6 +146,7 @@ def test_cli_list_reports_admission_without_importing_task_code(
         "task_02\tformalize\tscaffolded\tquarantined\tSheridan Paper to Formalization",
         "task_03\tdiscover\tresearch\tquarantined\tFinite-Model Research to Proof",
         "task_04\tformalize\tactive\tadmitted\tFive-Hat Knowledge Puzzle",
+        "task_05\tformalize\tactive\tquarantined\tFinite Public-Announcement Puzzle Suite",
     ]
 
 

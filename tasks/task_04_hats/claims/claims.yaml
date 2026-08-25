@@ -45,7 +45,7 @@ claims:
       locator: "problem.md: Intended reasoning, paragraphs 1-2"
       mapping: semantic-bridge
     status: accepted
-    evidence_level: audited-natural-language-derivation
+    evidence_level: audited-and-executable-seven-world-model
 
   - id: HAT-CONCLUSION-NOT-BLACK
     milestone: proof

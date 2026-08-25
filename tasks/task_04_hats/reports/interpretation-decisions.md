@@ -13,7 +13,8 @@
 - **Reason:** Proof Lab 0.0.1 exposes classical propositional and first-order foundations but no
   native knowledge modality or possible-world semantics.
 - **Consequence:** The verifier certifies the propositional consequence of the bridge, not the
-  bridge's modal semantics. The source document supplies the finite-world justification.
+  bridge's modal semantics. Task 5 now checks the bridge exhaustively in the seven-world finite
+  model, while keeping that computational evidence outside the Metamath trust boundary.
 
 ## ID-003 — Weaken Bob's announcement visibly
 

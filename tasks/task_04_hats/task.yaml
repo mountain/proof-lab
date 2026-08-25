@@ -29,7 +29,8 @@ formalization:
     - phi-implies-psi-implies-chi
   verified_conclusion: not-psi
   natural_language_conclusion: Carol-wears-white
-  epistemic_bridge_status: explicit-assumption-not-internally-derived
+  epistemic_bridge_status: finite-model-checked-not-kernel-derived
+  semantic_evidence: ../task_05_epistemic_puzzles
 
 implementation:
   package_module: proof_lab.tasks.task_04_hats.proofs

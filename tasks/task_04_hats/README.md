@@ -21,6 +21,8 @@ he wears white. The proof uses modus ponens, contraposition (`con3`), and two fu
 steps. It does not cite `five_hat_conclusion` or use a raw proof fallback.
 
 The epistemic bridge is explicit because the current dependency stack does not supply a native
-knowledge modality. See [problem/problem.md](problem/problem.md) for the puzzle and
+knowledge modality. Task 5 checks it exhaustively using finite public-announcement semantics, but
+that checker remains computational evidence rather than a Metamath proof. See
+[problem/problem.md](problem/problem.md) for the puzzle and
 [reports/interpretation-decisions.md](reports/interpretation-decisions.md) for the exact trust
 boundary.

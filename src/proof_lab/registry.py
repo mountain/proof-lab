@@ -98,6 +98,15 @@ _TASKS = {
             ),
         ),
     ),
+    "task_05": TaskSpec(
+        task_id="task_05",
+        slug="epistemic-puzzles",
+        title="Finite Public-Announcement Puzzle Suite",
+        kind="formalize",
+        status="active",
+        manifest_path="tasks/task_05_epistemic_puzzles/task.yaml",
+        artifact_namespace="artifacts/task_05",
+    ),
 }
 
 TASKS: Mapping[str, TaskSpec] = MappingProxyType(_TASKS)
