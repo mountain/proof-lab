@@ -11,7 +11,7 @@ from skfd.api_v2 import BuildContextV2
 
 from proof_lab.registry import PACKAGE_TASK_IDS, TASKS, TaskSpec, get_task
 
-TaskBuilder = Callable[[BuildContextV2, TaskSpec], None]
+TaskBuilder = Callable[[BuildContextV2, Sequence[TaskSpec]], None]
 
 
 class TaskAdmissionError(ValueError):
@@ -59,10 +59,14 @@ def build_registered_tasks(
     ctx: BuildContextV2,
     task_ids: Sequence[str] = PACKAGE_TASK_IDS,
 ) -> None:
+    tasks_by_builder: dict[str, list[TaskSpec]] = {}
     for task in resolve_package_plan(task_ids):
         if task.builder is None:  # Narrowing guard for static type checkers.
             raise TaskAdmissionError(f"task {task.task_id!r} has no builder")
-        _load_builder(task.builder)(ctx, task)
+        tasks_by_builder.setdefault(task.builder, []).append(task)
+
+    for builder_reference, tasks in tasks_by_builder.items():
+        _load_builder(builder_reference)(ctx, tuple(tasks))
 
 
 def _parser() -> argparse.ArgumentParser:

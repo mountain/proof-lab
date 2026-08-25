@@ -9,6 +9,7 @@ difficult a theorem appears.
 | Task 1 | **Prove** | Statement, theory, and expected answer | Verified proof | Admitted |
 | Task 2 | **Formalize** | Source paper and intended conclusion | Verified, auditable formalization | Scaffolded |
 | Task 3 | **Discover** | Research question | Certified theorem, counterexample, restricted result, bounded frontier, or audited inconclusion | Quarantined research |
+| Task 4 | **Formalize** | Five-hat puzzle and intended answer | Verified propositional core with an explicit epistemic boundary | Admitted |
 
 The progression is an uncertainty chain:
 
@@ -28,9 +29,11 @@ build. The registry uses exact builder and proof-function references; it never d
 by scanning filenames.
 
 ProofScaffold 0.0.9 recursively discovers `src/**/build.py`, so
-`src/proof_lab/build.py` is deliberately the repository's only build entry point. Task-specific
-adapters use `builder.py`. Draft formalizations, experiments, solver output, conjectures, holes,
-and generated artifacts remain outside the formal build boundary.
+`src/proof_lab/build.py` is deliberately the repository's only build entry point. Tasks on the
+same authoring stack may share one exact group-builder reference so their dependency closure is
+emitted only once; task-specific adapters use `builder.py` when needed. Draft formalizations,
+experiments, solver output, conjectures, holes, and generated artifacts remain outside the formal
+build boundary.
 
 ## Repository layout
 
@@ -40,11 +43,13 @@ tasks/                          durable task records and research evidence
   task_01_textbook/             proof reconstruction
   task_02_sheridan/             paper-to-formalization pipeline
   task_03_finite_models/        research-to-proof pipeline
+  task_04_hats/                 small puzzle-to-formalization pipeline
 src/proof_lab/
   registry.py                   task catalogue and explicit admission plan
   task_runner.py                read-only registry CLI and build dispatcher
   build.py                      the single ProofScaffold build entry point
   tasks/task_01_textbook/       installed Task 1 implementation
+  tasks/task_04_hats/           installed Task 4 implementation
 artifacts/                      generated-evidence namespaces
 schemas/                        minimal v1 evidence contracts
 ```
@@ -77,6 +82,14 @@ starts with bounded model search and a candidate toggle invariant. Search result
 proofs. A universal `NoFiniteModel` result requires a formal host semantics for finite structures
 and satisfaction; without that layer, the strongest admissible negative result is an exact bounded
 frontier.
+
+### Task 4 — Formalize
+
+Task 4 formalizes the classic five-hat knowledge puzzle: Alice and Bob successively say that they
+do not know their own hat colors, allowing Carol's hat to be determined. The natural-language
+epistemic step is recorded as an explicit bridge assumption; the emitted theorem verifies its
+propositional consequence without pretending that the current toolchain has a native knowledge
+modality.
 
 ## Toolchain
 
@@ -112,6 +125,7 @@ Run the Task 1 scripts independently:
 uv run --frozen skfd verify src/proof_lab/tasks/task_01_textbook/proofs/double_modus_ponens.py
 uv run --frozen skfd verify src/proof_lab/tasks/task_01_textbook/proofs/modus_tollens.py
 uv run --frozen skfd verify src/proof_lab/tasks/task_01_textbook/proofs/linearity_import.py
+uv run --frozen skfd verify src/proof_lab/tasks/task_04_hats/proofs/five_hat_conclusion.py
 ```
 
 Run the admitted package build with strict interfaces and declared coverage:
@@ -122,7 +136,7 @@ uv run --frozen skfd verify proof-lab --level 1 --coverage declared
 
 The desired future interface is `skfd verify proof-lab:task_01` and
 `skfd verify proof-lab:all`. ProofScaffold 0.0.9 does not yet support namespaced task targets, so
-the package build currently executes the explicit admission tuple, which contains only Task 1.
+the package build currently executes the explicit admission tuple, which contains Tasks 1 and 4.
 
 ## Development rule
 
