@@ -1,0 +1,53 @@
+schema_version: proof-lab-task-v1
+
+task:
+  id: task_04
+  external_id: PS-PUZZLE-001
+  title: Five-Hat Knowledge Puzzle
+  workflow: formalize
+  status: active
+
+input_contract:
+  source_problem: known-and-local
+  formal_statement: extracted-and-audited
+  assumption_boundary: explicit
+  expected_answer: Carol-wears-white
+
+source:
+  problem: problem/problem.md
+  claim_ledger: claims/claims.yaml
+
+formalization:
+  logic_profile: classical-propositional-logic
+  variable_map:
+    phi: Alice-does-not-know-her-hat-color
+    psi: Carol-wears-black
+    chi: Bob-knows-he-wears-white
+  hypotheses:
+    - phi
+    - not-chi
+    - phi-implies-psi-implies-chi
+  verified_conclusion: not-psi
+  natural_language_conclusion: Carol-wears-white
+  epistemic_bridge_status: finite-model-checked-not-kernel-derived
+  semantic_evidence: ../task_05_epistemic_puzzles
+
+implementation:
+  package_module: proof_lab.tasks.task_04_hats.proofs
+  builder: proof_lab.tasks._propositional_builder:build_tasks
+  admitted_to_package_build: true
+
+proofs:
+  - function: prove_five_hat_conclusion
+    theorem: five_hat_conclusion
+    role: compiled-epistemic-inference
+
+artifacts:
+  namespace: artifacts/task_04
+
+acceptance:
+  require_verifier_acceptance: true
+  require_dependency_closure: true
+  require_explicit_interpretation_boundary: true
+  forbid_raw_fallback: true
+  forbid_target_theorem_reference: true

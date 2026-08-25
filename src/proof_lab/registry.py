@@ -42,7 +42,7 @@ _TASKS = {
         status="active",
         manifest_path="tasks/task_01_textbook/task.yaml",
         artifact_namespace="artifacts/task_01",
-        builder="proof_lab.tasks.task_01_textbook.builder:build_task",
+        builder="proof_lab.tasks._propositional_builder:build_tasks",
         implementation_module="proof_lab.tasks.task_01_textbook.proofs",
         proofs=(
             ProofEntry(
@@ -80,12 +80,39 @@ _TASKS = {
         manifest_path="tasks/task_03_finite_models/task.yaml",
         artifact_namespace="artifacts/task_03",
     ),
+    "task_04": TaskSpec(
+        task_id="task_04",
+        slug="hats",
+        title="Five-Hat Knowledge Puzzle",
+        kind="formalize",
+        status="active",
+        manifest_path="tasks/task_04_hats/task.yaml",
+        artifact_namespace="artifacts/task_04",
+        builder="proof_lab.tasks._propositional_builder:build_tasks",
+        implementation_module="proof_lab.tasks.task_04_hats.proofs",
+        proofs=(
+            ProofEntry(
+                function="prove_five_hat_conclusion",
+                theorem="five_hat_conclusion",
+                role="compiled-epistemic-inference",
+            ),
+        ),
+    ),
+    "task_05": TaskSpec(
+        task_id="task_05",
+        slug="epistemic-puzzles",
+        title="Finite Public-Announcement Puzzle Suite",
+        kind="formalize",
+        status="active",
+        manifest_path="tasks/task_05_epistemic_puzzles/task.yaml",
+        artifact_namespace="artifacts/task_05",
+    ),
 }
 
 TASKS: Mapping[str, TaskSpec] = MappingProxyType(_TASKS)
 
 # This is an explicit release admission plan. Do not derive it from task status.
-PACKAGE_TASK_IDS: tuple[str, ...] = ("task_01",)
+PACKAGE_TASK_IDS: tuple[str, ...] = ("task_01", "task_04")
 
 
 def get_task(task_id: str) -> TaskSpec:

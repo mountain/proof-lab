@@ -14,7 +14,7 @@ input_contract:
 
 implementation:
   package_module: proof_lab.tasks.task_01_textbook.proofs
-  builder: proof_lab.tasks.task_01_textbook.builder:build_task
+  builder: proof_lab.tasks._propositional_builder:build_tasks
   admitted_to_package_build: true
 
 proofs:
