@@ -1,5 +1,7 @@
 # Task 6 — Dining Cryptographers Security Demo
 
+[中文说明：协议历史、有限模型、Metamath 证明与证据边界](README.zh-CN.md)
+
 Task 6 moves finite epistemic logic from recreational puzzles to a small security protocol. In
 Chaum's dining-cryptographers story, either the NSA paid for dinner or exactly one of Alice, Bob,
 and Carol did. Three pairwise secret coin flips let the group reveal which case occurred without
