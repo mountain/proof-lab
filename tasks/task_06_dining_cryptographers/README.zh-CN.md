@@ -1,5 +1,7 @@
 # 餐厅密码学家：从匿名通信故事到可核验的有限证明
 
+[面向投资人的简要介绍与进展汇报](INVESTOR_BRIEF.zh-CN.md)
+
 这份说明回答三个容易混在一起的问题：餐厅密码学家协议从哪里来；Proof Lab
 具体验证了什么；其中哪些结论已经进入 Metamath 内核，哪些仍然依赖 Python
 有限模型计算。
@@ -172,8 +174,8 @@ formal_transcript_bits(payer, coins)
 
 PR #3 在两个 CI job 都成功后以 squash 方式合并：
 
-- [PR #3：add formal proofs for Dining Cryptographers](https://github.com/mountain/proof-lab/pull/3)
-- [合并提交 `4f9b18c`](https://github.com/mountain/proof-lab/commit/4f9b18cb60ab6583bfd43e553a8df5ac4eeece69)
+- [PR #3：add formal proofs for Dining Cryptographers](https://github.com/epistemic-frontier/proof-lab/pull/3)
+- [合并提交 `4f9b18c`](https://github.com/epistemic-frontier/proof-lab/commit/4f9b18cb60ab6583bfd43e553a8df5ac4eeece69)
 
 合并前的结果为：34 个 Python 测试通过，task/claim schema 通过；正式包覆盖率为 6 个声明定理、
 279 个实际发射定理、0 个声明但未发射的定理，并明确出现：
